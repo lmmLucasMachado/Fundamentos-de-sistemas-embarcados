@@ -38,6 +38,10 @@
 /*!                         Own header files                                  */
 #include "bme280.h"
 
+//
+#include <stdio.h>
+#include <stdlib.h>
+
 /******************************************************************************/
 /*!                               Structures                                  */
 
@@ -136,16 +140,15 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev);
 /*!
  * @brief This function starts execution of the program.
  */
+    FILE *pont_arq;
+
 int main(int argc, char* argv[])
 {
     struct bme280_dev dev;
 
     struct identifier id;
 
-    FILE *pont_arq;
     pont_arq = fopen("arquivo.csv", "w");
-
-
 
     /* Variable to define the result */
     int8_t rslt = BME280_OK;
@@ -200,6 +203,7 @@ int main(int argc, char* argv[])
     }
 
     return 0;
+
 }
 
 /*!
@@ -283,7 +287,7 @@ void print_sensor_data(struct bme280_data *comp_data)
         temp_m   = temp_m/10;
         press_m  = press_m/10;
         hum_m    = hum_m/10;
-        printf("tupla %d escrita", count_tupla)
+        printf("tupla %d escrita --> %0.2lf, %0.2lf, %0.2lf", count_tupla, temp, press, hum);
         count_tupla++;
         fprintf(pont_arq, "\"%0.2lf\";\"%0.2lf\";\"%0.2lf\"\n", temp, press, hum);
         temp_m  = 0;
