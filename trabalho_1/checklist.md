@@ -1,6 +1,6 @@
 # Checklist
 
-1.  O sensor de temperatura BM280 está ligado ao barramento I2C e utiliza o endereço (0x76);
+1. [Consegui]O sensor de temperatura BM280 está ligado ao barramento I2C e utiliza o endereço (0x76);
 2. O módulo de display LCD está conectado ao barramento I2C utilizando o endereço 0x27;
 3. O resistor de potência e a ventoinha estão ambos ligados às portas GPIO e são acionados através do circuito de potência com relés;
     3.1. Resistor: GPIO 23 ou Pino 16 (Board)
