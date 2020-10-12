@@ -16,7 +16,7 @@
  * @brief Linux userspace test code, simple and mose code directly from the doco.
  * compile like this: gcc linux_userspace.c ../bme280.c -I ../ -o bme280
  * tested: Raspberry Pi.
- * Use like: ./bme280 /dev/i2c-1
+ * Use like: ./bme280 /dev/i2c-0
  * \include linux_userspace.c
  */
 
@@ -38,15 +38,8 @@
 /*!                         Own header files                                  */
 #include "bme280.h"
 
-//
-#include <stdio.h>
-#include <stdlib.h>
-
 /******************************************************************************/
 /*!                               Structures                                  */
-
-int count_csv = 0, count_tupla = 0;
-int temp_m = 0, press_m = 0, hum_m = 0;
 
 /* Structure that contains identifier details used in example */
 struct identifier
@@ -86,7 +79,7 @@ void user_delay_us(uint32_t period, void *intf_ptr);
  * Humidity
  *
  */
-void print_sensor_data(struct bme280_data *comp_data);
+void print_sensor_data(struct bme280_data *comp_data, double *temp, double *press, double *hum);
 
 /*!
  *  @brief Function for reading the sensor's registers through I2C bus.
@@ -140,28 +133,25 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev);
 /*!
  * @brief This function starts execution of the program.
  */
-    FILE *pont_arq;
 
 int main(int argc, char* argv[])
 {
     struct bme280_dev dev;
 
     struct identifier id;
-
-    pont_arq = fopen("arquivo.csv", "w");
+    
+    const char path[] = "/dev/i2c-1";
 
     /* Variable to define the result */
     int8_t rslt = BME280_OK;
 
-    if (argc < 2)
-    {
+    if ((id.fd = open(path, O_RDWR)) < 2){
         fprintf(stderr, "Missing argument for i2c bus.\n");
         exit(1);
     }
 
-    if ((id.fd = open(argv[1], O_RDWR)) < 0)
-    {
-        fprintf(stderr, "Failed to open the i2c bus %s\n", argv[1]);
+    if ((id.fd = open(path, O_RDWR)) < 0){
+        fprintf(stderr, "Failed to open the i2c bus %s\n", path);
         exit(1);
     }
 
@@ -176,7 +166,6 @@ int main(int argc, char* argv[])
 //#endif
 
     /* Make sure to select BME280_I2C_ADDR_PRIM or BME280_I2C_ADDR_SEC as needed */
-
     dev.intf = BME280_I2C_INTF;
     dev.read = user_i2c_read;
     dev.write = user_i2c_write;
@@ -187,23 +176,18 @@ int main(int argc, char* argv[])
 
     /* Initialize the bme280 */
     rslt = bme280_init(&dev);
-    fclose(pont_arq);
-
-    if (rslt != BME280_OK)
-    {
+    if (rslt != BME280_OK) {
         fprintf(stderr, "Failed to initialize the device (code %+d).\n", rslt);
         exit(1);
     }
 
     rslt = stream_sensor_data_forced_mode(&dev);
-    if (rslt != BME280_OK)
-    {
+    if (rslt != BME280_OK) {
         fprintf(stderr, "Failed to stream sensor data (code %+d).\n", rslt);
         exit(1);
     }
 
     return 0;
-
 }
 
 /*!
@@ -253,19 +237,14 @@ int8_t user_i2c_write(uint8_t reg_addr, const uint8_t *data, uint32_t len, void 
     return BME280_OK;
 }
 
-
-
 /*!
  * @brief This API used to print the sensor temperature, pressure and humidity data.
  */
-void print_sensor_data(struct bme280_data *comp_data)
-{
-    float temp, press, hum;
-
+void print_sensor_data(struct bme280_data *comp_data, double *temp, double *press, double *hum) {
 #ifdef BME280_FLOAT_ENABLE
-    temp = comp_data->temperature;
-    press = 0.01 * comp_data->pressure;
-    hum = comp_data->humidity;
+    *temp += comp_data->temperature;
+    *press += 0.01 * comp_data->pressure;
+    *hum += comp_data->humidity;
 #else
 #ifdef BME280_64BIT_ENABLE
     temp = 0.01f * comp_data->temperature;
@@ -277,26 +256,7 @@ void print_sensor_data(struct bme280_data *comp_data)
     hum = 1.0f / 1024.0f * comp_data->humidity;
 #endif
 #endif
-    if (count_csv != 10){
-        count_csv++;
-        temp_m  += temp;
-        press_m += press;
-        hum_m   += hum;
-    }
-    if (count_csv == 10){
-        temp_m   = temp_m/10;
-        press_m  = press_m/10;
-        hum_m    = hum_m/10;
-        printf("tupla %d escrita --> %0.2lf, %0.2lf, %0.2lf", count_tupla, temp, press, hum);
-        count_tupla++;
-        fprintf(pont_arq, "\"%0.2lf\";\"%0.2lf\";\"%0.2lf\"\n", temp, press, hum);
-        temp_m  = 0;
-        press_m = 0;
-        hum_m   = 0;
-        count_csv = 0;
-    }
-    printf("%0.2lf deg C, %0.2lf hPa, %0.2lf%%\n", temp, press, hum);
-
+    //printf("%0.2lf deg C, %0.2lf hPa, %0.2lf%%\n", temp, press, hum);
 }
 
 /*!
@@ -304,6 +264,11 @@ void print_sensor_data(struct bme280_data *comp_data)
  */
 int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
 {
+    FILE *p_file;
+    p_file = fopen ("data.csv", "w+");
+    fprintf(p_file, "Temperature, Humidity, Pressure\n");
+    fclose(p_file);
+    
     /* Variable to define the result */
     int8_t rslt = BME280_OK;
 
@@ -333,15 +298,20 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
         return rslt;
     }
 
-    printf("Temperature, Pressure, Humidity\n");
+    //printf("Temperature, Pressure, Humidity\n");
 
     /*Calculate the minimum delay required between consecutive measurement based upon the sensor enabled
      *  and the oversampling configuration. */
-    req_delay = bme280_cal_meas_delay(&dev->settings);
-    
+
+    //req_delay = bme280_cal_meas_delay(&dev->settings);
+    req_delay = 1000000;
+
+    int count = 0;
+    //int line = 0;
+    double temp = 0, press = 0, hum = 0;
+
     /* Continuously stream sensor data */
-    while (1)
-    {
+    while (1) {
         /* Set the sensor to forced mode */
         rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, dev);
         if (rslt != BME280_OK)
@@ -359,8 +329,24 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
             break;
         }
 
-        print_sensor_data(&comp_data);
-        sleep(1);
+        print_sensor_data(&comp_data, &temp, &press, &hum);
+
+        count++;
+
+        if(count == 10){
+            temp /= 10;
+            press /= 10;
+            hum /= 10;
+
+            //printf("line : %d", line);
+            //line++;
+            p_file = fopen ("data.csv", "a+");
+            fprintf(p_file, "\"%0.2lf\";\"%0.2lf\";\"%0.2lf\"\n", temp, hum, press);
+            fclose(p_file);
+
+            count = 0;
+            temp = press = hum = 0;
+        }
     }
 
     return rslt;
