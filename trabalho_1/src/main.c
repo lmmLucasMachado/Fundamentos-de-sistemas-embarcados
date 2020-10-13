@@ -5,7 +5,7 @@
 #include <signal.h>
 #include "../inc/uart.h"
 #include "../inc/lcd.h"
-//#include "../inc/bme280_temp.h"
+#include "../inc/bme280_temp.h"
 
 int main(int argc, const char * argv[]){
     //signal(SIGINT, interrupt_signal);
@@ -15,11 +15,12 @@ int main(int argc, const char * argv[]){
     while (1){
         temp_out = temp_outside();
         potenc = potenciometro();
-        temp_in = 10.0;//get_temp_inside();
+        temp_in = get_temp_inside();
 
         lcd_temperatures(temp_out,temp_in,10.0);
 
-        printf("temp externa: %f;\ntemp interna: %lf;\ntemppotenciometro %f\n", temp_out,temp_in, potenc);
+        printf("\n--------------------------\n");
+        printf("temp externa: %.2f;\ntemp interna: %.2lf;\ntemppotenciometro %.2f\n", temp_out, temp_in, potenc);
         
     }
     

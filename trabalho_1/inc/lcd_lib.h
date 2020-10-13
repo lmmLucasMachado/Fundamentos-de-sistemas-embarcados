@@ -1,7 +1,6 @@
 #ifndef LCD_LIB__H
 #define LCD_LIB__H
 
-
 /*
 *
 * by Lewis Loflin www.bristolwatch.com lewis@bvu.net
