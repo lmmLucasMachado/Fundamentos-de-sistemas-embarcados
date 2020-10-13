@@ -40,8 +40,8 @@
  * @brief Sensor driver for BME280 sensor
  */
 #include "../inc/bme280.h"
- 
- /**\name Internal macros */
+
+/**\name Internal macros */
 /* To identify osr settings selected by user */
 #define OVERSAMPLING_SETTINGS    UINT8_C(0x07)
 

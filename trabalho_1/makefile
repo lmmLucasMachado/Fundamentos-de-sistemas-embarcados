@@ -2,7 +2,7 @@ CC := gcc
 
 CFLAGS := -Wall
 
-LNFLAG :=
+LNFLAG := -l bme280 -lwiringPi
 
 SRCFILES := $(wildcard src/*.c)
 

@@ -4,6 +4,8 @@
 #include <termios.h>
 #include <fcntl.h>
 
+#include "../inc/uart.h"
+
 float reading(char code);
 
 float temp_outside(){

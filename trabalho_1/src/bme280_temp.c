@@ -36,8 +36,9 @@
 
 /******************************************************************************/
 /*!                         Own header files                                  */
-#include "../inc/bme280.h"
+#include "bme280.h"
 
+double temp = 0;
 /******************************************************************************/
 /*!                               Structures                                  */
 
@@ -134,7 +135,8 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev);
  * @brief This function starts execution of the program.
  */
 
-double return_temp_inside(){
+double get_temp_inside()
+{
     struct bme280_dev dev;
 
     struct identifier id;
@@ -179,17 +181,25 @@ double return_temp_inside(){
         fprintf(stderr, "Failed to initialize the device (code %+d).\n", rslt);
         exit(1);
     }
-    double temp_in = 0;
-    //get data
-    temp_in = stream_sensor_data_forced_mode(&dev);
-    //rslt = stream_sensor_data_forced_mode(&dev);
+
+    rslt = stream_sensor_data_forced_mode(&dev);
     if (rslt != BME280_OK) {
         fprintf(stderr, "Failed to stream sensor data (code %+d).\n", rslt);
         exit(1);
     }
-    return temp_in;
-    //return 0;
+
+    return temp;
 }
+/*
+int main(){
+    
+    double test = get_temp_inside();
+
+    printf("teste da temp: %lf", test);
+
+    return 0;
+}
+*/
 
 /*!
  * @brief This function reading the sensor's registers through I2C bus.
@@ -241,7 +251,7 @@ int8_t user_i2c_write(uint8_t reg_addr, const uint8_t *data, uint32_t len, void 
 /*!
  * @brief This API used to print the sensor temperature, pressure and humidity data.
  */
-void print_sensor_data(struct bme280_data *comp_data, double *temp, double *press, double *hum) {
+void print_sensor_data(struct bme280_data *comp_data, double *temp, double *press, double *hum){
 #ifdef BME280_FLOAT_ENABLE
     *temp += comp_data->temperature;
     *press += 0.01 * comp_data->pressure;
@@ -268,7 +278,7 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
     /*
     FILE *p_file;
     p_file = fopen ("data.csv", "w+");
-    fprintf(p_file, "\"Temperature\"\n");
+    fprintf(p_file, "\"Temperature\"; \"Humidity\"; Pressure\n");
     fclose(p_file);
     */
 
@@ -310,12 +320,12 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
     req_delay = 1000000;
 
     int count = 0;
-    //int line = 0;
-    double temp = 0, press = 0, hum = 0;
+
+    double press = 0, hum = 0;
+    temp = 0;
 
     /* Continuously stream sensor data */
-    int count_stream = 0;
-    while (count_stream == 0) {
+    do{
         /* Set the sensor to forced mode */
         rslt = bme280_set_sensor_mode(BME280_FORCED_MODE, dev);
         if (rslt != BME280_OK)
@@ -336,24 +346,23 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
         print_sensor_data(&comp_data, &temp, &press, &hum);
 
         count++;
-
         /*
         if(count == 10){
             temp /= 10;
+            press /= 10;
+            hum /= 10;
 
             //printf("line : %d", line);
             //line++;
-            
             p_file = fopen ("data.csv", "a+");
-            fprintf(p_file, "\"%0.2lf\";\n", temp);
+            fprintf(p_file, "\"%0.2lf\";\"%0.2lf\";\"%0.2lf\"\n", temp, hum, press);
             fclose(p_file);
 
             count = 0;
-            //temp = press = hum = 0;
-        }
-        */
-    }
-    
-    return temp;
-    //return rslt;
+            temp = press = hum = 0;
+        }*/
+         printf("\"%0.2lf\";\"%0.2lf\";\"%0.2lf\"\n", temp, hum, press);
+    }while (0);
+
+    return rslt;
 }

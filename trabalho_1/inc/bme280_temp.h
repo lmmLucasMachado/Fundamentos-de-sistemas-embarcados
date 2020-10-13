@@ -1,2 +1,8 @@
+#ifndef BME280_TEMP__H
+#define BME280_TEMP__H
 
-double return_temp_inside();
+#include "bme280.h"
+
+double get_temp_inside();
+
+#endif
