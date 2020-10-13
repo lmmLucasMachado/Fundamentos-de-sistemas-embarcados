@@ -275,12 +275,6 @@ void print_sensor_data(struct bme280_data *comp_data, double *temp, double *pres
  */
 int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
 {
-    /*
-    FILE *p_file;
-    p_file = fopen ("data.csv", "w+");
-    fprintf(p_file, "\"Temperature\"; \"Humidity\"; Pressure\n");
-    fclose(p_file);
-    */
 
     /* Variable to define the result */
     int8_t rslt = BME280_OK;
@@ -319,8 +313,6 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
     //req_delay = bme280_cal_meas_delay(&dev->settings);
     req_delay = 1000000;
 
-    int count = 0;
-
     double press = 0, hum = 0;
     temp = 0;
 
@@ -344,24 +336,7 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev)
         }
 
         print_sensor_data(&comp_data, &temp, &press, &hum);
-
-        count++;
-        /*
-        if(count == 10){
-            temp /= 10;
-            press /= 10;
-            hum /= 10;
-
-            //printf("line : %d", line);
-            //line++;
-            p_file = fopen ("data.csv", "a+");
-            fprintf(p_file, "\"%0.2lf\";\"%0.2lf\";\"%0.2lf\"\n", temp, hum, press);
-            fclose(p_file);
-
-            count = 0;
-            temp = press = hum = 0;
-        }*/
-         printf("\"%0.2lf\";\"%0.2lf\";\"%0.2lf\"\n", temp, hum, press);
+       
     }while (0);
 
     return rslt;

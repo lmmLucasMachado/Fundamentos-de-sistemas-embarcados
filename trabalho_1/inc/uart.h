@@ -3,10 +3,11 @@
 
 float reading(char code);
 
-float temp_outside();
+float get_temp_outside();
 
-void interrupt_signal(int signal);
+float get_potentiometer();
 
-float potenciometro();
+//void interrupt_signal(int signal);
+
 
 #endif

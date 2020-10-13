@@ -8,16 +8,16 @@
 
 float reading(char code);
 
-float temp_outside(){
+float get_temp_outside(){
 
     float num_float = 0;
 
-    num_float = reading(0xA0);
+    num_float = reading(0xA2);
 
     return num_float;
 }
 
-float potenciometro(){
+float get_potentiometer(){
 
     float num_float = 0;
 
@@ -33,6 +33,7 @@ float reading(char code){
     
     if (uart0_filestream == -1){
         printf("Erro - Não foi possível iniciar a UART.\n");
+        
         return 0;
     }
 
@@ -59,8 +60,8 @@ float reading(char code){
 
     float num_float;
 
-    //0xA0 temp externo
     //0xA1 potenciometro
+    //0xA2 temp externo
     count = read(uart0_filestream, &num_float, 4);
 
     if(count < 0)

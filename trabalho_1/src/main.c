@@ -13,8 +13,8 @@ int main(int argc, const char * argv[]){
     float temp_out = 0, temp_in = 0, potenc= 0;
 
     while (1){
-        temp_out = temp_outside();
-        potenc = potenciometro();
+        temp_out = get_temp_outside();
+        potenc = get_potentiometer();
         temp_in = get_temp_inside();
 
         lcd_temperatures(temp_out,temp_in,10.0);
