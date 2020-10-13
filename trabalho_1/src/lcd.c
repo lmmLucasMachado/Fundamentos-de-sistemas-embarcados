@@ -6,7 +6,8 @@
 #include "../inc/lcd.h"
 #include "../inc/lcd_lib.h"
 
-void lcd_temperatures(float temp_in, float temp_out, float temp_re) {
+void post_lcd_temperatures(float temp_in, float temp_out, float temp_re){
+
     printf("Temperature out: %f\n", temp_out);
     printf("Temperature inside %f\n", temp_in);
 

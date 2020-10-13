@@ -27,7 +27,7 @@ O sistema como um todo é composto por:
 7. Potenciômetro;
 8. Raspberry Pi 4;
 
-![Figura](/figuras/Figura_Trabalho_1.png)
+![Figura](./img/Figura_Trabalho_1.png)
 
 ## 3. Conexões entre os módulos do sistema
 
@@ -39,7 +39,7 @@ O sistema como um todo é composto por:
     3.3. Atenção: o acionamento dos relés está invertido. Portanto o valor de GPIO como 1 desliga o equipamento enquanto 0 liga (Sugestão: usar a bibliteca bcm2835).
 4. O Arduino está conectado à placa Raspberry Pi via UART;
 5. O potenciômetro é conectado à porta analógica (A1) do Arduino;
-6. O sensor de temperatura LM35 para medição do ambiente controlado está ligado à porta analógica (A0) do Arduino;
+6. O sensor de temperatura LM35 para medição do ambiente controlado está ligado à porta analógica (A2) do Arduino;
 
 ## 4. Requisitos
 

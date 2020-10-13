@@ -1,11 +1,11 @@
 # Checklist
 
-1. O sensor de temperatura BM280 está ligado ao barramento I2C e utiliza o endereço (0x76);
-2. [Consegui] O módulo de display LCD está conectado ao barramento I2C utilizando o endereço 0x27;
-3. O resistor de potência e a ventoinha estão ambos ligados às portas GPIO e são acionados através do circuito de potência com relés;
-    3.1. Resistor: GPIO 23 ou Pino 16 (Board)
-    3.2. Ventoinha: GPIO 24 ou Pino 18 (Board)
-    3.3. Atenção: o acionamento dos relés está invertido. Portanto o valor de GPIO como 1 desliga o equipamento enquanto 0 liga (Sugestão: usar a bibliteca bcm2835).
-4. O Arduino está conectado à placa Raspberry Pi via UART;
-5. [Consegui] O potenciômetro é conectado à porta analógica (A1) do Arduino;
-6. [Consegui] O sensor de temperatura LM35 para medição do ambiente controlado está ligado à porta analógica (A0) do Arduino;
+|FEITO|   ITEM    |   COMENTÁRIO  |   VALOR   |
+|--|------------------------|---------------------------------------------------------------------------------------------------------|---------|
+||**Implementação do controlador** | Correta implementação do controlador On/Off com histerese, incluindo a leitura das temperaturas e acionamento dos atuadores (resistor e ventoinha. |    3,0 |
+||**Menu de controle**        | Correta implementação do menu com as opções de acesso do usuário e sua atualização de informações. | 1,0 |
+|Feito|**Leitura do Potenciômetro**| Leitura do potenciômetro através da comunicação UART com o Arduino. | 1,5 |
+|Feito|**Mostrador no LCD**        | Apresentação das 3 temperatudas no LCD. | 1,5 |
+||**Armazenamento em arquivo**| Armazenamento em arquivo CSV dos dados medidos. |   1,0 |
+|Feito|**Qualidade do Código**     | Utilização de boas práticas como o uso de bons nomes, modularização e organização em geral.    |  2,0 |
+||**Pontuação Extra**         |   Qualidade e usabilidade acima da média.  |  0,5   |

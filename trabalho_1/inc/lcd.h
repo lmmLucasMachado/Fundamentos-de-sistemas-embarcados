@@ -4,7 +4,7 @@
 #define LINE1  0x80 // 1st line
 #define LINE2  0xC0 // 2nd line
 
-void lcd_temperatures(float temp_in, float temp_out, float temp_re);
+void post_lcd_temperatures(float temp_in, float temp_out, float temp_re);
 
 
 #endif

@@ -69,8 +69,6 @@ float reading(char code){
     
     else if(count == 0)
         printf("Dado indisponível.\n");
-    else
-        printf("%f\n", num_float);
 
     close(uart0_filestream);
 
