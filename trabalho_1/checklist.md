@@ -2,7 +2,7 @@
 
 |FEITO|   ITEM    |   COMENTÁRIO  |   VALOR   |
 |--|------------------------|---------------------------------------------------------------------------------------------------------|---------|
-||**Implementação do controlador** | Correta implementação do controlador On/Off com histerese, incluindo a leitura das temperaturas e acionamento dos atuadores (resistor e ventoinha. |    3,0 |
+|Feito|**Implementação do controlador** | Correta implementação do controlador On/Off com histerese, incluindo a leitura das temperaturas e acionamento dos atuadores (resistor e ventoinha. |    3,0 |
 ||**Menu de controle**        | Correta implementação do menu com as opções de acesso do usuário e sua atualização de informações. | 1,0 |
 |Feito|**Leitura do Potenciômetro**| Leitura do potenciômetro através da comunicação UART com o Arduino. | 1,5 |
 |Feito|**Mostrador no LCD**        | Apresentação das 3 temperatudas no LCD. | 1,5 |

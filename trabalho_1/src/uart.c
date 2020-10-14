@@ -12,7 +12,7 @@ float get_temp_outside(){
 
     float num_float = 0;
 
-    num_float = reading(0xA2);
+    num_float = reading(0xA1);
 
     return num_float;
 }
@@ -21,7 +21,7 @@ float get_potentiometer(){
 
     float num_float = 0;
 
-    num_float = reading(0xA1);
+    num_float = reading(0xA2);
 
     return num_float;
 }
