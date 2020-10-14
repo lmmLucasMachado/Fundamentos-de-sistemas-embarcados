@@ -21,47 +21,55 @@
 #include <bcm2835.h>
 #include <stdio.h>
 #include "../inc/gpio.h"
+void init_lib_gpio(){
+    bcm2835_init();
+}
 
-void set_gpio(int pin){
+void close_lib_gpio(){
+    bcm2835_close();
+}
+
+void interrpt_gpio(int signal) {
+    bcm2835_close();
+    exit(0);
+}
+
+void set_high_gpio(int pin){
 
     if (!bcm2835_init())
         exit(1);
  
     //1 resistor
     //2 fan
-    if (pin == 1)
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_ALT5);
-    else if (pin == 2)
-        bcm2835_gpio_fsel(FAN, BCM2835_GPIO_FSEL_ALT5);
+    if (pin == 1){
+        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(RESISTOR, HIGH);
+    }
+    else if (pin == 2){
+        bcm2835_gpio_fsel(FAN, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(FAN, HIGH);
+    }
+    else
+        printf("Estavel");
+    
+}
+
+void set_low_gpio(int pin){
+
+    if (!bcm2835_init())
+        exit(1);
+ 
+    //1 resistor
+    //2 fan
+    if (pin == 1){
+        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(RESISTOR, LOW);
+    }
+    else if (pin == 2){
+        bcm2835_gpio_fsel(FAN, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(FAN, LOW);
+    }
     else
         printf("opcao invalida");
     
-    // Set the output pin to Alt Fun 5, to allow PWM channel 0 to be output there
- 
-    // Clock divider is set to 16.
-    // With a divider of 16 and a RANGE of 1024, in MARKSPACE mode,
-    // the pulse repetition frequency will be
-    // 1.2MHz/1024 = 1171.875Hz, suitable for driving a DC motor with PWM
-    bcm2835_pwm_set_clock(BCM2835_PWM_CLOCK_DIVIDER_16);
-    bcm2835_pwm_set_mode(PWM_CHANNEL, 1, 1);
-    bcm2835_pwm_set_range(PWM_CHANNEL, RANGE);
- 
-    // Vary the PWM m/s ratio between 1/RANGE and (RANGE-1)/RANGE
-    // over the course of a a few seconds
-    int direction = 1; // 1 is increase, -1 is decrease
-    int data = 1;
-
-    //while (1)
-    //{
-        if (data == 1)
-            direction = 1;   // Switch to increasing
-        else if (data == RANGE-1)
-            direction = -1;  // Switch to decreasing
-        data += direction;
-        bcm2835_pwm_set_data(PWM_CHANNEL, data);
-        bcm2835_delay(1);
-    //}
- 
-    bcm2835_close();
-
 }

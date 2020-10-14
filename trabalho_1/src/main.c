@@ -9,10 +9,10 @@
 #include "../inc/gpio.h"
 
 
-
-
 int main(int argc, const char * argv[]){
     
+    signal(SIGINT,interrpt_gpio);
+
     FILE *p_file;
     p_file = fopen ("../data.csv", "w+");
     fprintf(p_file, "\"Temp exeterna\",\"Temp interna\",\"Temp desejada\"\n");
@@ -28,7 +28,7 @@ int main(int argc, const char * argv[]){
     printf("2 - para digitar uma temperatura.\n");
     printf("\nDigite apenas um numero e pressione enter.\n");
 
-    int buffer = 0, gpio = 0, count = 0;
+    int buffer = 0, gpio_high = 0, gpio_low = 0, count = 0;
 
     do{
 
@@ -57,6 +57,8 @@ int main(int argc, const char * argv[]){
 
     }while(1);
 
+    init_lib_gpio();
+
     while (1){
         sleep(0.100);
         temp_out = get_temp_outside();
@@ -76,13 +78,21 @@ int main(int argc, const char * argv[]){
             count = 0;
         }
 
-        post_lcd_temperatures(temp_out, temp_in, temp_tr);
+        post_lcd_temperatures(temp_in, temp_out, temp_tr);
 
-        if (temp_in < temp_tr)
-            gpio = 1;
-        else if (temp_in > temp_tr)
-            gpio = 2;
-        set_gpio(gpio);
+        if (temp_in > temp_tr){
+            gpio_high = 1;
+            gpio_low = 2;
+        }
+        else if (temp_in < temp_tr){
+            gpio_high = 2;
+            gpio_low = 1;
+        }
+        else
+            gpio_high = gpio_low = 0;
+
+        set_high_gpio(gpio_high);
+        set_low_gpio(gpio_low);
 
         printf("\n--------------------------\n");
         printf("temp externa: %.2f;\ntemp interna: %.2lf;\ntemppotenciometro %.2f\n", temp_out, temp_in,temp_tr);
