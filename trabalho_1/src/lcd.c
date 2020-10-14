@@ -8,6 +8,12 @@
 
 void post_lcd_temperatures(float temp_in, float temp_out, float temp_re){
 
+    if (wiringPiSetup () == -1) exit (1);
+
+    fd = wiringPiI2CSetup(I2C_ADDR);
+
+    lcd_init(); // setup LCD
+
     printf("Temperature out: %f\n", temp_out);
     printf("Temperature inside %f\n", temp_in);
 
@@ -16,7 +22,8 @@ void post_lcd_temperatures(float temp_in, float temp_out, float temp_re){
     sprintf(line1, "TI:%0.2f T2:%0.2f", temp_in, temp_out);
 
     char line2[255];
-    sprintf(line2, "TR: %0.2f ", temp_re);
+//    sprintf(line2, "TR: %0.2f ", temp_re);
+    sprintf(line2, "deu certo ");
 
     printf(line1);
     printf(line2);
