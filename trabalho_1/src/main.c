@@ -9,18 +9,26 @@
 #include "../inc/gpio.h"
 
 
+
+
 int main(int argc, const char * argv[]){
+    
+    FILE *p_file;
+    p_file = fopen ("../data.csv", "w+");
+    fprintf(p_file, "\"Temp exeterna\",\"Temp interna\",\"Temp desejada\"\n");
+    fclose(p_file);
+
     //signal(SIGINT, interrupt_signal);
 
     float temp_out = 0, temp_in = 0, temp_tr= 0, temp_wish = 0;
-
-    int buffer = 0, gpio = 0;
 
     printf("-----------------  Menu  -----------------\n");
     printf("0 - Fechar prog.\n");
     printf("1 - pegar temperatura pelo potenciometro.\n");
     printf("2 - para digitar uma temperatura.\n");
     printf("\nDigite apenas um numero e pressione enter.\n");
+
+    int buffer = 0, gpio = 0, count = 0;
 
     do{
 
@@ -46,19 +54,26 @@ int main(int argc, const char * argv[]){
             printf("Opcao invalida, por favor escolha uma opcao listada no menu, grato.\n");
             
         }
+
     }while(1);
 
-    int count = 0;
     while (1){
-        sleep(1);
+        sleep(0.100);
         temp_out = get_temp_outside();
 
-        sleep(1);
+        sleep(0.100);
         temp_in = get_temp_inside();
 
         if (buffer == 1){
-            sleep(1);
+            sleep(0.100);
             temp_tr = get_potentiometer();
+        }
+
+        if (count == 2 ){
+            p_file = fopen ("../data.csv", "a+");
+            fprintf(p_file, "\"%0.2lf\",\"%0.2lf\",\"%0.2lf\"\n", temp_out, temp_in, temp_tr);
+            fclose(p_file);
+            count = 0;
         }
 
         post_lcd_temperatures(temp_out, temp_in, temp_tr);
@@ -72,7 +87,6 @@ int main(int argc, const char * argv[]){
         printf("\n--------------------------\n");
         printf("temp externa: %.2f;\ntemp interna: %.2lf;\ntemppotenciometro %.2f\n", temp_out, temp_in,temp_tr);
         
-        printf("\n%d\n",count);
         count++;
     }
     

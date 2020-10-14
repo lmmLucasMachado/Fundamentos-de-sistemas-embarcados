@@ -27,4 +27,6 @@ void post_lcd_temperatures(float temp_in, float temp_out, float temp_re){
     lcdLoc(LINE2);
     typeln(line2);
 
+    printf("\n--------------------------------------\n\nLCD\nTI:%0.2f T2:%0.2f\n", temp_in, temp_out);
+
 }
