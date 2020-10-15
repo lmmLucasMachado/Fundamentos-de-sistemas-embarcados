@@ -6,5 +6,4 @@
 
 void post_lcd_temperatures(float temp_in, float temp_out, float temp_re);
 
-
 #endif

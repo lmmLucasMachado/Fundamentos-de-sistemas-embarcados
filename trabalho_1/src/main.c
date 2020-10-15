@@ -3,15 +3,16 @@
 #include <unistd.h>
 
 #include <signal.h>
-#include "../inc/uart.h"
 #include "../inc/lcd.h"
-#include "../inc/bme280_temp.h"
 #include "../inc/gpio.h"
+#include "../inc/uart.h"
+#include "../inc/bme280_temp.h"
+#include "../inc/interrupt_sistem.h"
 
 
 int main(int argc, const char * argv[]){
     
-    signal(SIGINT,interrpt_gpio);
+    signal(SIGINT, interrpt_sistem);
 
     FILE *p_file;
     p_file = fopen ("../data.csv", "w+");
@@ -80,6 +81,10 @@ int main(int argc, const char * argv[]){
 
         post_lcd_temperatures(temp_in, temp_out, temp_tr);
 
+        // 1 RESISTOR
+        // 2 FAN
+        // LOW - ON
+        // WIGH - OFF
         if (temp_in > temp_tr){
             gpio_high = 1;
             gpio_low = 2;

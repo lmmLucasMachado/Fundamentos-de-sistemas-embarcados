@@ -18,20 +18,10 @@
 // Copyright (C) 2013 Mike McCauley
 // $Id: RF22.h,v 1.21 2012/05/30 01:51:25 mikem Exp $
  
-#include <bcm2835.h>
-#include <stdio.h>
 #include "../inc/gpio.h"
+
 void init_lib_gpio(){
     bcm2835_init();
-}
-
-void close_lib_gpio(){
-    bcm2835_close();
-}
-
-void interrpt_gpio(int signal) {
-    bcm2835_close();
-    exit(0);
 }
 
 void set_high_gpio(int pin){

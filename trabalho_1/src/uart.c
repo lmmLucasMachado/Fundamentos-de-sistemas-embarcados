@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <termios.h>
-#include <fcntl.h>
 
 #include "../inc/uart.h"
 
@@ -66,7 +61,6 @@ float reading(char code){
 
     if(count < 0)
         printf("Erro na leitura.\n");
-    
     else if(count == 0)
         printf("Dado indisponível.\n");
 

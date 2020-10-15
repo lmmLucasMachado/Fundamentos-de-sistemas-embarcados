@@ -19,6 +19,7 @@
 #include <wiringPi.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 // Define some device parameters
 #define I2C_ADDR   0x27 // I2C device address
@@ -36,17 +37,24 @@
 #define ENABLE  0b00000100 // Enable bit
 
 void lcd_init(void);
+
 void lcd_byte(int bits, int mode);
+
 void lcd_toggle_enable(int bits);
 
 // added by Lewis
 void typeInt(int i);
-void typeFloat(float myFloat);
-void lcdLoc(int line); //move cursor
-void ClrLcd(void); // clr LCD return home
-void typeln(const char *s);
-void typeChar(char val);
-int fd;  // seen by all subroutines
 
+void typeFloat(float myFloat);
+
+void lcdLoc(int line); //move cursor
+
+void ClrLcd(void); // clr LCD return home
+
+void typeln(const char *s);
+
+void typeChar(char val);
+
+int fd;  // seen by all subroutines
 
 #endif

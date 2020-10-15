@@ -1,8 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <wiringPiI2C.h>
-#include <wiringPi.h>
 #include "../inc/lcd.h"
 #include "../inc/lcd_lib.h"
 
@@ -19,7 +14,7 @@ void post_lcd_temperatures(float temp_in, float temp_out, float temp_re){
 
 
     char line1[255];
-    sprintf(line1, "TI:%0.2f T2:%0.2f", temp_in, temp_out);
+    sprintf(line1, "TI:%0.2f TE:%0.2f", temp_in, temp_out);
 
     char line2[255];
     sprintf(line2, "TR: %0.2f ", temp_re);

@@ -33,13 +33,10 @@
  
 #include <bcm2835.h>
 #include <stdio.h>
-#include "../inc/gpio.h"
 
 void init_lib_gpio();
 
-void close_lib_gpio();
-
-void interrpt_gpio(int signal);
+//void interrpt_gpio(int signal);
 
 void set_high_gpio(int pin);
 
