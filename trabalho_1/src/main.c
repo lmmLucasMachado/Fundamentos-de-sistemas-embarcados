@@ -8,7 +8,7 @@
 #include "../inc/gpio.h"
 #include "../inc/uart.h"
 #include "../inc/bme280_temp.h"
-#include "../inc/interrupt_sistem.h"
+#include "../inc/interrupt_system.h"
 
 void sig_write_csv();
 
@@ -16,7 +16,7 @@ float temp_out = 0, temp_in = 0, temp_tr= 0;
 
 int main(int argc, const char * argv[]){
     
-    signal(SIGINT, interrpt_sistem);
+    signal(SIGINT, interrpt_system);
 
     FILE *p_file;
     p_file = fopen ("../data.csv", "w+");
@@ -68,7 +68,6 @@ int main(int argc, const char * argv[]){
     while (1){
         sleep(0.100);
         temp_out = get_temp_outside();
-
         temp_in = get_temp_inside();
 
         if (buffer == 1){

@@ -1,8 +1,8 @@
 
-#include "../inc/interrupt_sistem.h"
+#include "../inc/interrupt_system.h"
 
 
-void interrpt_sistem(int signal) {
+void interrpt_system(int signal) {
     // GPIO
     bcm2835_gpio_write(FAN, HIGH);
     bcm2835_gpio_write(RESISTOR, HIGH);

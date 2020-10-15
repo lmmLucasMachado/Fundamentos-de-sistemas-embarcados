@@ -19,8 +19,8 @@ void post_lcd_temperatures(float temp_in, float temp_out, float temp_re){
     sprintf(line2, "TR: %0.2f ", temp_re);
     //sprintf(line2, "deu certo ");
 
-    printf(line1);
-    printf(line2);
+    //printf(line1);
+    //printf(line2);
 
     ClrLcd();
     lcdLoc(LINE1);
