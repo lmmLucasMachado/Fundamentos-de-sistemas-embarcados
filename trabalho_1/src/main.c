@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 #include <signal.h>
+#include <time.h>
 #include "../inc/lcd.h"
 #include "../inc/gpio.h"
 #include "../inc/uart.h"
@@ -16,10 +17,14 @@ int main(int argc, const char * argv[]){
 
     FILE *p_file;
     p_file = fopen ("../data.csv", "w+");
-    fprintf(p_file, "\"Temp exeterna\",\"Temp interna\",\"Temp desejada\"\n");
+    fprintf(p_file, "\"Data\",\"Hora\",\"Temp exeterna\",\"Temp interna\",\"Temp desejada\"\n");
     fclose(p_file);
 
-    //signal(SIGINT, interrupt_signal);
+    struct tm *date_hour;     
+    time_t segundos;
+    time(&segundos);   
+
+    date_hour = localtime(&segundos);  
 
     float temp_out = 0, temp_in = 0, temp_tr= 0, temp_wish = 0;
 
@@ -74,6 +79,8 @@ int main(int argc, const char * argv[]){
 
         if (count == 2 ){
             p_file = fopen ("../data.csv", "a+");
+            fprintf(p_file,"\"%d/%d/%d\",", date_hour->tm_mday, date_hour->tm_mon+1,date_hour->tm_year+1900);
+            fprintf(p_file,"\"%d:%d:%d\",", date_hour->tm_hour, date_hour->tm_min, date_hour->tm_sec);
             fprintf(p_file, "\"%0.2lf\",\"%0.2lf\",\"%0.2lf\"\n", temp_out, temp_in, temp_tr);
             fclose(p_file);
             count = 0;
@@ -88,8 +95,7 @@ int main(int argc, const char * argv[]){
         if (temp_in > temp_tr){
             gpio_high = 1;
             gpio_low = 2;
-        }
-        else if (temp_in < temp_tr){
+        }else if (temp_in < temp_tr){
             gpio_high = 2;
             gpio_low = 1;
         }
