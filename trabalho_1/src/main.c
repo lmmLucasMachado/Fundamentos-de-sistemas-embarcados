@@ -9,7 +9,7 @@ int main(int argc, const char * argv[]){
     signal(SIGINT, interrupt_system);
 
     FILE *p_file;
-    p_file = fopen ("../data.csv", "w+");
+    p_file = fopen ("./doc/data.csv", "w+");
     fprintf(p_file, "\"Data\",\"Hora\",\"Temp exeterna\",\"Temp interna\",\"Temp desejada\"\n");
     fclose(p_file);
 
@@ -97,7 +97,7 @@ void sig_write_csv(){
     date_hour = localtime(&segundos);  
 
     FILE *p_file;
-    p_file = fopen ("../data.csv", "a+");
+    p_file = fopen ("./doc/data.csv", "a+");
     fprintf(p_file,"\"%d/%d/%d\",", date_hour->tm_mday, date_hour->tm_mon+1,date_hour->tm_year+1900);
     fprintf(p_file,"\"%d:%d:%d\",", date_hour->tm_hour, date_hour->tm_min, date_hour->tm_sec);
     fprintf(p_file, "\"%0.2lf\",\"%0.2lf\",\"%0.2lf\"\n", temp_out, temp_in, temp_tr);
