@@ -1,13 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-
-#include <signal.h>
-#include <time.h>
-#include "../inc/lcd.h"
-#include "../inc/gpio.h"
-#include "../inc/uart.h"
-#include "../inc/bme280_temp.h"
 #include "../inc/interrupt_system.h"
 
 void sig_write_csv();
@@ -16,14 +6,12 @@ float temp_out = 0, temp_in = 0, temp_tr= 0;
 
 int main(int argc, const char * argv[]){
     
-    signal(SIGINT, interrpt_system);
+    signal(SIGINT, interrupt_system);
 
     FILE *p_file;
     p_file = fopen ("../data.csv", "w+");
     fprintf(p_file, "\"Data\",\"Hora\",\"Temp exeterna\",\"Temp interna\",\"Temp desejada\"\n");
     fclose(p_file);
-
-    float temp_wish = 0;
 
     printf("-----------------  Menu  -----------------\n");
     printf("0 - Fechar prog.\n");
@@ -33,6 +21,7 @@ int main(int argc, const char * argv[]){
 
     int buffer = 0, gpio_high = 0, gpio_low = 0;
 
+    //menu
     do{
 
         scanf("%d", &buffer);
@@ -48,9 +37,7 @@ int main(int argc, const char * argv[]){
         }else if(buffer == 2){
             printf("Opcao escolhida \"2\", digitar uma temperatura.\nDigite a temperatura desejada.\n");
 
-            scanf("%f", &temp_wish);
-            temp_tr = temp_wish;
-
+            scanf("%f", &temp_tr);
             break;
         }
         else{
@@ -77,10 +64,8 @@ int main(int argc, const char * argv[]){
 
         post_lcd_temperatures(temp_in, temp_out, temp_tr);
 
-        // 1 RESISTOR
-        // 2 FAN
-        // LOW - ON
-        // WIGH - OFF
+        // 1 RESISTOR       LOW - ON
+        // 2 FAN            WIGH - OFF
         if (temp_in > temp_tr){
             gpio_high = 1;
             gpio_low = 2;

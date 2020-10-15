@@ -3,7 +3,8 @@
 
 void post_lcd_temperatures(float temp_in, float temp_out, float temp_re){
 
-    if (wiringPiSetup () == -1) exit (1);
+    if (wiringPiSetup () == -1)
+        exit (1);
 
     fd = wiringPiI2CSetup(I2C_ADDR);
 
