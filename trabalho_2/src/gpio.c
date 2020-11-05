@@ -56,35 +56,35 @@ void set_high_gpio(int pin){
         break;
     case 25:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_P_01, HIGH);
+        bcm2835_gpio_write(SENS_PRE_01, HIGH);
         break;
     case 26:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_P_02, HIGH);
+        bcm2835_gpio_write(SENS_PRE_02, HIGH);
         break;
     case 5:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_01, HIGH);
+        bcm2835_gpio_write(SENS_OPEN_01, HIGH);
         break;
     case 6:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_02, HIGH);
+        bcm2835_gpio_write(SENS_OPEN_02, HIGH);
         break;
     case 12:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_03, HIGH);
+        bcm2835_gpio_write(SENS_OPEN_03, HIGH);
         break;
     case 16:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_04, HIGH);
+        bcm2835_gpio_write(SENS_OPEN_04, HIGH);
         break;
     case 20:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_05, HIGH);
+        bcm2835_gpio_write(SENS_OPEN_05, HIGH);
         break;
     case 21:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_06, HIGH);
+        bcm2835_gpio_write(SENS_OPEN_06, HIGH);
         break;
     default:
         printf("Opção invalida");
@@ -125,35 +125,35 @@ void set_low_gpio(int pin){
         break;
     case 25:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_P_01, LOW);
+        bcm2835_gpio_write(SENS_PRE_01, LOW);
         break;
     case 26:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_P_02, LOW);
+        bcm2835_gpio_write(SENS_PRE_02, LOW);
         break;
     case 5:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_01, LOW);
+        bcm2835_gpio_write(SENS_OPEN_01, LOW);
         break;
     case 6:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_02, LOW);
+        bcm2835_gpio_write(SENS_OPEN_02, LOW);
         break;
     case 12:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_03, LOW);
+        bcm2835_gpio_write(SENS_OPEN_03, LOW);
         break;
     case 16:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_04, LOW);
+        bcm2835_gpio_write(SENS_OPEN_04, LOW);
         break;
     case 20:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_05, LOW);
+        bcm2835_gpio_write(SENS_OPEN_05, LOW);
         break;
     case 21:
         bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_A_06, LOW);
+        bcm2835_gpio_write(SENS_OPEN_06, LOW);
         break;
     default:
         printf("Opção invalida");
