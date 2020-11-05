@@ -9,6 +9,7 @@
 #include <signal.h>
 #include "../inc/gpio.h"
 #include "../inc/bme280_i2c.h"
+#include "../inc/system_control.h"
 
 
 void interrupt_system(int signal);

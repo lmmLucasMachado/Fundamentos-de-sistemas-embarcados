@@ -1,24 +1,48 @@
 #include "../inc/gpio.h"
 
+
+
 void init_lib_gpio(){
     bcm2835_init();
+/*
+    // init lamp
+    bcm2835_gpio_fsel(LAMP_01, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(LAMP_02, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(LAMP_03, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(LAMP_04, BCM2835_GPIO_FSEL_OUTP);
+    
+    // init air
+    bcm2835_gpio_fsel(AIR_01, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(AIR_02, BCM2835_GPIO_FSEL_OUTP);
+    
+    bcm2835_gpio_fsel(SENS_PRE_01, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(SENS_PRE_02, BCM2835_GPIO_FSEL_OUTP);
+    
+    bcm2835_gpio_fsel(SENS_OPEN_01, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(SENS_OPEN_02, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(SENS_OPEN_03, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(SENS_OPEN_04, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(SENS_OPEN_05, BCM2835_GPIO_FSEL_OUTP);
+    bcm2835_gpio_fsel(SENS_OPEN_06, BCM2835_GPIO_FSEL_OUTP);
+*/
+
 }
 
 /*
-    Lâmpada 01 (Cozinha)                    17
-    Lâmpada 02 (Sala)                       18
-    Lâmpada 03 (Quarto 01)                  27
-    Lâmpada 04 (Quarto 02)                  22
-    Ar-Condicionado 01 (Quarto 01)          23
-    Ar-Condicionado 02 (Quarto 02)          24
-    Sensor de Presença 01 (Sala)            25
-    Sensor de Presença 02 (Cozinha)         26
-    Sensor Abertura 01 (Porta Cozinha)      05
-    Sensor Abertura 02 (Janela Cozinha)     06
-    Sensor Abertura 03 (Porta Sala)         12
-    Sensor Abertura 04 (Janela Sala)        16
-    Sensor Abertura 05 (Janela Quarto 01)   20
-    Sensor Abertura 06 (Janela Quarto 02)   21
+    Lâmpada 01 (Cozinha)                    0
+    Lâmpada 02 (Sala)                       1
+    Lâmpada 03 (Quarto 01)                  2
+    Lâmpada 04 (Quarto 02)                  3
+    Ar-Condicionado 01 (Quarto 01)          4
+    Ar-Condicionado 02 (Quarto 02)          5
+    Sensor de Presença 01 (Sala)            6
+    Sensor de Presença 02 (Cozinha)         7
+    Sensor Abertura 01 (Porta Cozinha)      8
+    Sensor Abertura 02 (Janela Cozinha)     9
+    Sensor Abertura 03 (Porta Sala)         10
+    Sensor Abertura 04 (Janela Sala)        11
+    Sensor Abertura 05 (Janela Quarto 01)   12
+    Sensor Abertura 06 (Janela Quarto 02)   13
 */
 
 // LOW      on
@@ -30,64 +54,58 @@ void set_high_gpio(int pin){
         exit(1);
 
     switch (pin) {
-    case 17:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 0:
+        bcm2835_gpio_fsel(LAMP_01, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_01, HIGH);
         break;
-    case 18:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 1:
+        bcm2835_gpio_fsel(LAMP_02, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_02, HIGH);
         break;
-    case 27:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 2:
+        bcm2835_gpio_fsel(LAMP_03, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_03, HIGH);
         break;
-    case 22:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 3:
+        bcm2835_gpio_fsel(LAMP_04, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_04, HIGH);
         break;
-    case 23:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(AR_01, HIGH);
-        break;
-    case 24:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(AR_02, HIGH);
-        break;
-    case 25:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_PRE_01, HIGH);
-        break;
-    case 26:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_PRE_02, HIGH);
+    case 4:
+        bcm2835_gpio_fsel(AIR_01, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(AIR_01, HIGH);
         break;
     case 5:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_fsel(AIR_02, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(AIR_02, HIGH);
+        break;
+/*
+    case 6:
+        bcm2835_gpio_write(SENS_PRE_01, HIGH);
+        break;
+    case 7:
+        bcm2835_gpio_write(SENS_PRE_02, HIGH);
+        break;
+    case 8:
         bcm2835_gpio_write(SENS_OPEN_01, HIGH);
         break;
-    case 6:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 9:
         bcm2835_gpio_write(SENS_OPEN_02, HIGH);
         break;
-    case 12:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 10:
         bcm2835_gpio_write(SENS_OPEN_03, HIGH);
         break;
-    case 16:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 11:
         bcm2835_gpio_write(SENS_OPEN_04, HIGH);
         break;
-    case 20:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 12:
         bcm2835_gpio_write(SENS_OPEN_05, HIGH);
         break;
-    case 21:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 13:
         bcm2835_gpio_write(SENS_OPEN_06, HIGH);
         break;
+*/
     default:
-        printf("Opção invalida");
+        printf("Opcao invalida");
         break;
     }
     
@@ -99,64 +117,58 @@ void set_low_gpio(int pin){
         exit(1);
 
     switch (pin) {
-    case 17:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 0:
+        bcm2835_gpio_fsel(LAMP_01, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_01, LOW);
         break;
-    case 18:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 1:
+        bcm2835_gpio_fsel(LAMP_02, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_02, LOW);
         break;
-    case 27:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 2:
+        bcm2835_gpio_fsel(LAMP_03, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_03, LOW);
         break;
-    case 22:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 3:
+        bcm2835_gpio_fsel(LAMP_04, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_04, LOW);
         break;
-    case 23:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(AR_01, LOW);
-        break;
-    case 24:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(AR_02, LOW);
-        break;
-    case 25:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_PRE_01, LOW);
-        break;
-    case 26:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
-        bcm2835_gpio_write(SENS_PRE_02, LOW);
+    case 4:
+        bcm2835_gpio_fsel(AIR_01, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(AIR_01, LOW);
         break;
     case 5:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_fsel(AIR_02, BCM2835_GPIO_FSEL_OUTP);
+        bcm2835_gpio_write(AIR_02, LOW);
+        break;
+/*
+    case 6:
+        bcm2835_gpio_write(SENS_PRE_01, LOW);
+        break;
+    case 7:
+        bcm2835_gpio_write(SENS_PRE_02, LOW);
+        break;
+    case 8:
         bcm2835_gpio_write(SENS_OPEN_01, LOW);
         break;
-    case 6:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 9:
         bcm2835_gpio_write(SENS_OPEN_02, LOW);
         break;
-    case 12:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 10:
         bcm2835_gpio_write(SENS_OPEN_03, LOW);
         break;
-    case 16:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 11:
         bcm2835_gpio_write(SENS_OPEN_04, LOW);
         break;
-    case 20:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 12:
         bcm2835_gpio_write(SENS_OPEN_05, LOW);
         break;
-    case 21:
-        bcm2835_gpio_fsel(RESISTOR, BCM2835_GPIO_FSEL_OUTP);
+    case 13:
         bcm2835_gpio_write(SENS_OPEN_06, LOW);
         break;
+*/
     default:
-        printf("Opção invalida");
+        printf("Opcao invalida");
         break;
     }
     
