@@ -6,15 +6,15 @@ void init_socket(){
 
 }
 
-void mock_json(char *msg)
-{
+void mock_json(char *msg) {
     FILE *arq;
     char Linha[100];
     char *result;
     int i,j=0,a=0;
 
     // Abre um arquivo TEXTO para LEITURA
-    arq = fopen("exem_json.txt", "rt");
+    arq = fopen("./exem_json.txt", "r");
+    
     if (arq == NULL) {
         printf("Problemas na abertura do arquivo\n");
         return;
@@ -37,8 +37,7 @@ void mock_json(char *msg)
 }
 
 
-void get_json(double* lamp, double* air) {
-
+void get_json(int* lamp, int* air) {
 
     char buffer[MAX_MSG];
 
@@ -48,8 +47,10 @@ void get_json(double* lamp, double* air) {
     
     cJSON *json = cJSON_Parse(buffer);
 
+    cJSON* item;
+    
     // get lamp
-    cJSON* item = cJSON_GetObjectItemCaseSensitive(json, "lamp_1");
+    item = cJSON_GetObjectItemCaseSensitive(json, "lamp_1");
     lamp[0] = cJSON_GetNumberValue(item);
 
     item = cJSON_GetObjectItemCaseSensitive(json, "lamp_2");

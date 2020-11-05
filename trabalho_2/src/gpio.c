@@ -2,9 +2,9 @@
 
 
 
+
 void init_lib_gpio(){
     bcm2835_init();
-/*
     // init lamp
     bcm2835_gpio_fsel(LAMP_01, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(LAMP_02, BCM2835_GPIO_FSEL_OUTP);
@@ -15,6 +15,7 @@ void init_lib_gpio(){
     bcm2835_gpio_fsel(AIR_01, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(AIR_02, BCM2835_GPIO_FSEL_OUTP);
     
+
     bcm2835_gpio_fsel(SENS_PRE_01, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(SENS_PRE_02, BCM2835_GPIO_FSEL_OUTP);
     
@@ -24,7 +25,7 @@ void init_lib_gpio(){
     bcm2835_gpio_fsel(SENS_OPEN_04, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(SENS_OPEN_05, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(SENS_OPEN_06, BCM2835_GPIO_FSEL_OUTP);
-*/
+
 
 }
 
@@ -55,27 +56,21 @@ void set_high_gpio(int pin){
 
     switch (pin) {
     case 0:
-        bcm2835_gpio_fsel(LAMP_01, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_01, HIGH);
         break;
     case 1:
-        bcm2835_gpio_fsel(LAMP_02, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_02, HIGH);
         break;
     case 2:
-        bcm2835_gpio_fsel(LAMP_03, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_03, HIGH);
         break;
     case 3:
-        bcm2835_gpio_fsel(LAMP_04, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_04, HIGH);
         break;
     case 4:
-        bcm2835_gpio_fsel(AIR_01, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(AIR_01, HIGH);
         break;
     case 5:
-        bcm2835_gpio_fsel(AIR_02, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(AIR_02, HIGH);
         break;
 /*
@@ -118,27 +113,21 @@ void set_low_gpio(int pin){
 
     switch (pin) {
     case 0:
-        bcm2835_gpio_fsel(LAMP_01, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_01, LOW);
         break;
     case 1:
-        bcm2835_gpio_fsel(LAMP_02, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_02, LOW);
         break;
     case 2:
-        bcm2835_gpio_fsel(LAMP_03, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_03, LOW);
         break;
     case 3:
-        bcm2835_gpio_fsel(LAMP_04, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(LAMP_04, LOW);
         break;
     case 4:
-        bcm2835_gpio_fsel(AIR_01, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(AIR_01, LOW);
         break;
     case 5:
-        bcm2835_gpio_fsel(AIR_02, BCM2835_GPIO_FSEL_OUTP);
         bcm2835_gpio_write(AIR_02, LOW);
         break;
 /*
