@@ -11,20 +11,20 @@ int main(int argc, const char * argv[]){
 
     init_lib_gpio();
     
-    int lamp[5], air[3];
+    int lamp[5], air[3], status[8] = {1, 1, 1, 1, 1, 1, 1, 1};
 
     get_json(lamp, air);
     
+    int sens;
+
+    //sens = get_sens(2);
+    //printf("\npino 16 e %d\n",sens);
+
     int i;
 
-    for(i = 0;i < 4;i++){
-        printf("\n%d\n",lamp[i]);
-    }
-
-    
     while(1){
         // lamp on/off
-        printf("\nAQUI\n");
+        //printf("\nAQUI\n");
         for(i = 0;i < 4;i++){
             if (lamp[i] == 0)
                 set_high_gpio(i);

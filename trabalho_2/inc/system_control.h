@@ -13,8 +13,8 @@
 
 #define MAX_MSG 1024
 
-void mock_json(char *msg);
-
 void get_json(int* lamp, int* air);
+
+void status_sensor(int *status);
 
 #endif

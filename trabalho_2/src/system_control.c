@@ -39,6 +39,7 @@ void mock_json(char *msg) {
 
 void get_json(int* lamp, int* air) {
 
+    //pegar msg do socket
     char buffer[MAX_MSG];
 
     mock_json(buffer);
@@ -71,4 +72,19 @@ void get_json(int* lamp, int* air) {
 
     cJSON_Delete(json);
 
+}
+
+void status_sensor(int *status){
+    int i, buffer, status;
+    for (i = 0;i < 8;i++){
+        buffer = get_sensor(i);
+        
+        if (buffer != status[i]){
+            //push pra central
+            printf("Aciona alarm!!!");
+            break;
+        }else{
+            status[i] = buffer;
+        }
+    }
 }

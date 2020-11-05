@@ -4,7 +4,12 @@
 
 
 void init_lib_gpio(){
+    
     bcm2835_init();
+    
+    if (!bcm2835_init())
+        exit(1);
+    
     // init lamp
     bcm2835_gpio_fsel(LAMP_01, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(LAMP_02, BCM2835_GPIO_FSEL_OUTP);
@@ -15,8 +20,7 @@ void init_lib_gpio(){
     bcm2835_gpio_fsel(AIR_01, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(AIR_02, BCM2835_GPIO_FSEL_OUTP);
     
-
-    bcm2835_gpio_fsel(SENS_PRE_01, BCM2835_GPIO_FSEL_OUTP);
+    //bcm2835_gpio_fsel(SENS_PRE_01, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(SENS_PRE_02, BCM2835_GPIO_FSEL_OUTP);
     
     bcm2835_gpio_fsel(SENS_OPEN_01, BCM2835_GPIO_FSEL_OUTP);
@@ -25,7 +29,6 @@ void init_lib_gpio(){
     bcm2835_gpio_fsel(SENS_OPEN_04, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(SENS_OPEN_05, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(SENS_OPEN_06, BCM2835_GPIO_FSEL_OUTP);
-
 
 }
 
@@ -50,9 +53,6 @@ void init_lib_gpio(){
 // HIGHT    off
 
 void set_high_gpio(int pin){
-
-    if (!bcm2835_init())
-        exit(1);
 
     switch (pin) {
     case 0:
@@ -130,35 +130,48 @@ void set_low_gpio(int pin){
     case 5:
         bcm2835_gpio_write(AIR_02, LOW);
         break;
-/*
-    case 6:
-        bcm2835_gpio_write(SENS_PRE_01, LOW);
-        break;
-    case 7:
-        bcm2835_gpio_write(SENS_PRE_02, LOW);
-        break;
-    case 8:
-        bcm2835_gpio_write(SENS_OPEN_01, LOW);
-        break;
-    case 9:
-        bcm2835_gpio_write(SENS_OPEN_02, LOW);
-        break;
-    case 10:
-        bcm2835_gpio_write(SENS_OPEN_03, LOW);
-        break;
-    case 11:
-        bcm2835_gpio_write(SENS_OPEN_04, LOW);
-        break;
-    case 12:
-        bcm2835_gpio_write(SENS_OPEN_05, LOW);
-        break;
-    case 13:
-        bcm2835_gpio_write(SENS_OPEN_06, LOW);
-        break;
-*/
     default:
         printf("Opcao invalida");
         break;
     }
     
+}
+
+int get_sensor(int pin){
+
+    int sens=0;
+    //printf("\n\n%d\n\n",bcm2835_gpio_get_pud(SENS_PRE_01));
+    
+    switch(pin){
+        case 0:
+            sens = bcm2835_gpio_get_pud(SENS_PRE_01);
+            break;
+        case 1:
+            sens = bcm2835_gpio_get_pud(SENS_PRE_02);
+            break;
+        case 2:
+            sens = bcm2835_gpio_get_pud(SENS_OPEN_01);
+            break;
+        case 3:
+            sens = bcm2835_gpio_get_pud(SENS_OPEN_02);
+            break;
+        case 4:
+            sens = bcm2835_gpio_get_pud(SENS_OPEN_03);
+            break;
+        case 5:
+            sens = bcm2835_gpio_get_pud(SENS_OPEN_04);
+            break;
+        case 6:
+            sens = bcm2835_gpio_get_pud(SENS_OPEN_05);
+            break;
+        case 7:
+            sens = bcm2835_gpio_get_pud(SENS_OPEN_06);
+            break;
+        default:
+            printf("Opcao invalida");
+            break;
+    
+    }
+
+    return sens;
 }

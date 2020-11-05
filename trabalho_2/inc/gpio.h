@@ -36,4 +36,7 @@ void set_high_gpio(int pin);
 
 void set_low_gpio(int pin);
 
+int get_sensor(int pin);
+
+
 #endif
