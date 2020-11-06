@@ -142,30 +142,33 @@ int get_sensor(int pin){
     int sens=0;
     //printf("\n\n%d\n\n",bcm2835_gpio_get_pud(SENS_PRE_01));
     
+    // 1 off
+    // 0 on
     switch(pin){
         case 0:
-            sens = bcm2835_gpio_get_pud(SENS_PRE_01);
+            sens = bcm2835_gpio_lev(SENS_PRE_01);
+            //printf("\n%d\n",sens);
             break;
         case 1:
-            sens = bcm2835_gpio_get_pud(SENS_PRE_02);
+            sens = bcm2835_gpio_lev(SENS_PRE_02);
             break;
         case 2:
-            sens = bcm2835_gpio_get_pud(SENS_OPEN_01);
+            sens = bcm2835_gpio_lev(SENS_OPEN_01);
             break;
         case 3:
-            sens = bcm2835_gpio_get_pud(SENS_OPEN_02);
+            sens = bcm2835_gpio_lev(SENS_OPEN_02);
             break;
         case 4:
-            sens = bcm2835_gpio_get_pud(SENS_OPEN_03);
+            sens = bcm2835_gpio_lev(SENS_OPEN_03);
             break;
         case 5:
-            sens = bcm2835_gpio_get_pud(SENS_OPEN_04);
+            sens = bcm2835_gpio_lev(SENS_OPEN_04);
             break;
         case 6:
-            sens = bcm2835_gpio_get_pud(SENS_OPEN_05);
+            sens = bcm2835_gpio_lev(SENS_OPEN_05);
             break;
         case 7:
-            sens = bcm2835_gpio_get_pud(SENS_OPEN_06);
+            sens = bcm2835_gpio_lev(SENS_OPEN_06);
             break;
         default:
             printf("Opcao invalida");

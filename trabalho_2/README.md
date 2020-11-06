@@ -21,3 +21,10 @@ make run
 Aluno: Lucas Machado
 
 Matricula: 150015917
+
+
+### Bibliografia
+
+- https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
+
+- http://www.airspayce.com/mikem/bcm2835/group__gpio.html#ga22f9b05d8edda3ef57cd58728e9c3baa

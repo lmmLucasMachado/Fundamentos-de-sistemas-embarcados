@@ -1,8 +1,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
-
 #include "../inc/system_control.h"
 
 void *set_lamp_and_air();

@@ -1,12 +1,45 @@
 #include "../inc/system_control.h"
 
-void init_socket(){
+int sock_fd;
 
+void init_server(){
+
+    int connfd, len; 
+    struct sockaddr_in servaddr, cli; 
+
+    sock_fd = socket(AF_INET, SOCK_STREAM, 0); 
+    
+    if (sock_fd == -1)
+        printf("socket creation failed...\n"); 
+    else
+        printf("Socket successfully created..\n"); 
+    
+    bzero(&servaddr, sizeof(servaddr)); 
+
+    // assign IP, PORT 
+    servaddr.sin_family = AF_INET; 
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
+    servaddr.sin_port = htons(PORT_D); 
     printf("vai iniciar");
+
+    // Binding newly created socket to given IP and verification 
+    if ((bind(sock_fd, (SA*)&servaddr, sizeof(servaddr))) != 0) { 
+        printf("socket bind failed...\n"); 
+        exit(0); 
+    } 
+    else
+        printf("Socket successfully binded..\n");
+
+    // Now server is ready to listen and verification 
+    if ((listen(sock_fd, 5)) != 0) { 
+        printf("Listen failed...\n"); 
+        exit(0); 
+    }
 
 }
 
 void mock_json(char *msg) {
+
     FILE *arq;
     char Linha[100];
     char *result;
@@ -75,7 +108,7 @@ void get_json(int* lamp, int* air) {
 }
 
 void status_sensor(int *status){
-    int i, buffer, status;
+    int i, buffer;
     for (i = 0;i < 8;i++){
         buffer = get_sensor(i);
         
@@ -85,6 +118,36 @@ void status_sensor(int *status){
             break;
         }else{
             status[i] = buffer;
+        }
+    
+    }
+
+}
+
+void *set_gpio(void* args){
+    
+    int lamp[5], air[3], status[8] = {1, 1, 1, 1, 1, 1, 1, 1};
+
+    get_json(lamp, air);
+    
+    while(1){
+        int i;
+        // lamp on/off
+        printf("\nAQUI\n");
+        for(i = 0;i < 4;i++){
+            if (lamp[i] == 0)
+                set_high_gpio(i);
+
+            else if(lamp[i] == 1)
+                set_low_gpio(i);
+        }
+
+        // air on/off
+        for(i = 0;i < 2;i++){
+            if (air[i] == 0)
+                set_high_gpio(i + 4);
+            else if(air[i] == 1)
+                set_low_gpio(i + 4);
         }
     }
 }
