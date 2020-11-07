@@ -21,8 +21,6 @@ int main(int argc, const char * argv[]){
     pthread_create (&control_thread[1], NULL, init_maintain_data, NULL);
     pthread_join(control_thread[1], NULL);
 
-    
-
     return 0;
 
 }
