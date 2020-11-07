@@ -1,10 +1,9 @@
 #include "../inc/system_control.h"
 
-int sock_fd;
+int sock_fd, conect_fd;
 
 void init_server(){
 
-    int conect_fd;
     struct sockaddr_in servaddr;
 
     sock_fd = socket(AF_INET, SOCK_STREAM, 0); 
@@ -18,7 +17,7 @@ void init_server(){
 
     // assign IP, PORT 
     servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
+    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_CENTRAL); 
     servaddr.sin_port = htons(PORT_D); 
     printf("vai iniciar");
 
@@ -113,7 +112,9 @@ void get_json(int* lamp, int* air){
 
 }
 
-int status_sensor(int *status_sens){
+int lamp[5], air[3], status_sens[8] = {1, 1, 1, 1, 1, 1, 1, 1};
+
+int status_sensor(){
     int i, buffer;
     int alarm_on = 0;
 
@@ -131,8 +132,6 @@ int status_sensor(int *status_sens){
     }
     return buffer;
 }
-
-int lamp[5], air[3], status_sens[8] = {1, 1, 1, 1, 1, 1, 1, 1};
 
 void *server_listen(void* args){
     
@@ -195,9 +194,9 @@ void maintain_data_csv(){
     fprintf(p_file,"\"%d/%d/%d\",", date_hour->tm_mday, date_hour->tm_mon+1,date_hour->tm_year+1900);
     fprintf(p_file,"\"%d:%d:%d\",", date_hour->tm_hour, date_hour->tm_min, date_hour->tm_sec);
     fprintf(p_file, "\"%0.2lf\",\"%0.2lf\"\n", data[0], data[1]);
-    fprintf(p_file, "\"%0.2lf\",\"%0.2lf,\"%0.2lf\",\"%0.2lf\",\"%0.2lf\",\"%0.2lf\",", data[0], data[1],lamp[0],lamp[1],lamp[2],lamp[3]);
-    fprintf(p_file, "\"%0.2lf\",\"%0.2lf,\"%0.2lf\",\"%0.2lf\",\"%0.2lf\",\"%0.2lf\",", air[0],air[1],status_sens[0],status_sens[1],status_sens[2],status_sens[3]);
-    fprintf(p_file, "\"%0.2lf\",\"%0.2lf,\"%0.2lf\",\"%0.2lf\"\n", status_sens[4],status_sens[5],status_sens[6],status_sens[7]);
+    fprintf(p_file, "\"%d\",\"%d\",\"%d\",\"%d\",", lamp[0],lamp[1],lamp[2],lamp[3]);
+    fprintf(p_file, "\"%d\",\"%d,\"%d\",\"%d\",\"%d\",\"%d\",", air[0],air[1],status_sens[0],status_sens[1],status_sens[2],status_sens[3]);
+    fprintf(p_file, "\"%d\",\"%d,\"%d\",\"%d\"\n", status_sens[4],status_sens[5],status_sens[6],status_sens[7]);
     
     fclose(p_file);
 

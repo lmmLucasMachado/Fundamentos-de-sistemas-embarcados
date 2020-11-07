@@ -11,12 +11,9 @@
 #include <netinet/in.h>
 #include <sys/socket.h> 
 #include <sys/types.h> 
-#include <arpa/inet.h>
 
-#include "../inc/cJSON.h"
-#include "../inc/gpio.h"
-#include "../inc/bme280_i2c.h"
 #include "../inc/interrupt_system.h"
+#include "../inc/menu.h"
 
 #define SA struct sockaddr 
 #define MAX_MSG 1024
@@ -31,7 +28,7 @@ void init_server();
 
 void get_json(int* lamp, int* air);
 
-int status_sensor(int *status_sens){
+void status_sensor(int *status);
 
 void *server_listen(void* args);
 
