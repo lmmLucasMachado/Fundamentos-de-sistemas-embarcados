@@ -35,6 +35,6 @@ void status_sensor(int *status);
 
 void *set_gpio(void* args);
 
-void i2c_control();
+void maintain_data_csv();
 
 #endif

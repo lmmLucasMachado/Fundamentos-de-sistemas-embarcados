@@ -185,7 +185,7 @@ double *get_data() {
         exit(1);
     }
 
-    float *data = (float*)malloc(2*sizeof(float));
+    double *data = (double*)malloc(2*sizeof(double));
 
     data[0]=temp;
     data[1]=hum;

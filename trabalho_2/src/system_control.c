@@ -35,6 +35,19 @@ void init_server(){
         printf("Listen failed...\n"); 
         exit(0); 
     }
+    else
+        printf("Server listening..\n"); 
+    len = sizeof(cli); 
+
+    // Accept the data packet from client and verification 
+    connfd = accept(sock_fd, (SA*)&cli, &len); 
+    if (connfd < 0) { 
+        printf("server acccept failed...\n"); 
+        exit(0); 
+    } 
+    else
+        printf("server acccept the client...\n"); 
+
 
 }
 
@@ -70,12 +83,16 @@ void mock_json(char *msg) {
 }
 
 
-void get_json(int* lamp, int* air) {
+void get_json(int* lamp, int* air){
 
-    //pegar msg do socket
     char buffer[MAX_MSG];
 
-    mock_json(buffer);
+    //pega msg do socket
+    read(sock_fd, buffer, MAX_MSG);
+
+    printf("Menssage:\n %s", buffer);
+
+    //mock_json(buffer);
     
     printf("%s\n",buffer);
     
@@ -128,9 +145,11 @@ void *set_gpio(void* args){
     
     int lamp[5], air[3], status[8] = {1, 1, 1, 1, 1, 1, 1, 1};
 
-    get_json(lamp, air);
     
     while(1){
+        sleep(0.100);
+        get_json(lamp, air);
+
         int i;
         // lamp on/off
         printf("\nAQUI\n");
@@ -152,16 +171,33 @@ void *set_gpio(void* args){
     }
 }
 
-void i2c_control(){
-    double *data;
+void maintain_data_csv(){
 
-    data = get_data();
-    
-    int i;
-    for (i=0;i<2;i++)
-        printf("vetor %d: %lf\n",i,data[i]);
+    double *data;
 
     //data[0]=temp;
     //data[1]=hum;
-    //enviar dados de temp e hum pro central
+    data = get_data();
+    
+    // enviar sevidor central
+    int i;
+    for (i=0;i<2;i++)
+        printf("vetor %d: %lf\n",i,data[i]);
+    
+    struct tm *date_hour;     
+    time_t segundos;
+    time(&segundos);
+
+    date_hour = localtime(&segundos);  
+
+    FILE *p_file;
+    p_file = fopen ("./doc/data.csv", "a+");
+    fprintf(p_file,"\"%d/%d/%d\",", date_hour->tm_mday, date_hour->tm_mon+1,date_hour->tm_year+1900);
+    fprintf(p_file,"\"%d:%d:%d\",", date_hour->tm_hour, date_hour->tm_min, date_hour->tm_sec);
+    fprintf(p_file, "\"%0.2lf\",\"%0.2lf\"\n", data[0], data[1]);
+    fclose(p_file);
+
+    //printf("\n\nEscrevendo csv\n\n");
+    alarm(2);
+
 }
