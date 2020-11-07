@@ -33,8 +33,10 @@ void get_json(int* lamp, int* air);
 
 void status_sensor(int *status);
 
-void *set_gpio(void* args);
+void *server_listen(void* args);
 
 void maintain_data_csv();
+
+void *init_maintain_data(void *args);
 
 #endif
