@@ -26,7 +26,7 @@ void init_server(){
     if ((bind(sock_fd, (SA*)&servaddr, sizeof(servaddr))) != 0) { 
         printf("socket bind failed...\n"); 
         exit(0); 
-    } 
+    }
     else
         printf("Socket successfully binded..\n");
 
@@ -150,4 +150,18 @@ void *set_gpio(void* args){
                 set_low_gpio(i + 4);
         }
     }
+}
+
+void i2c_control(){
+    double *data;
+
+    data = get_data();
+    
+    int i;
+    for (i=0;i<2;i++)
+        printf("vetor %d: %lf\n",i,data[i]);
+
+    //data[0]=temp;
+    //data[1]=hum;
+    //enviar dados de temp e hum pro central
 }

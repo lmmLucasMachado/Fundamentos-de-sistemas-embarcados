@@ -135,7 +135,7 @@ int8_t stream_sensor_data_forced_mode(struct bme280_dev *dev);
  * @brief This function starts execution of the program.
  */
 
-double get_temp() {
+double *get_data() {
     struct bme280_dev dev;
     struct identifier id;
     const char path[] = "/dev/i2c-1";
@@ -185,62 +185,15 @@ double get_temp() {
         exit(1);
     }
 
-    return temp;
+    float *data = (float*)malloc(2*sizeof(float));
+
+    data[0]=temp;
+    data[1]=hum;
+
+    return data;
+
 }
 
-
-double get_hum() {
-    struct bme280_dev dev;
-    struct identifier id;
-    const char path[] = "/dev/i2c-1";
-
-    /* Variable to define the result */
-    int8_t rslt = BME280_OK;
-
-    if ((id.fd = open(path, O_RDWR)) < 2){
-        fprintf(stderr, "Missing argument for i2c bus.\n");
-        exit(1);
-    }
-
-    if ((id.fd = open(path, O_RDWR)) < 0){
-        fprintf(stderr, "Failed to open the i2c bus %s\n", path);
-        exit(1);
-    }
-
-//#ifdef __KERNEL__
-    id.dev_addr = BME280_I2C_ADDR_PRIM;
-    if (ioctl(id.fd, I2C_SLAVE, id.dev_addr) < 0)
-    {
-        fprintf(stderr, "Failed to acquire bus access and/or talk to slave.\n");
-        exit(1);
-    }
-
-//#endif
-
-    /* Make sure to select BME280_I2C_ADDR_PRIM or BME280_I2C_ADDR_SEC as needed */
-    dev.intf = BME280_I2C_INTF;
-    dev.read = user_i2c_read;
-    dev.write = user_i2c_write;
-    dev.delay_us = user_delay_us;
-
-    /* Update interface pointer with the structure that contains both device address and file descriptor */
-    dev.intf_ptr = &id;
-
-    /* Initialize the bme280 */
-    rslt = bme280_init(&dev);
-    if (rslt != BME280_OK) {
-        fprintf(stderr, "Failed to initialize the device (code %+d).\n", rslt);
-        exit(1);
-    }
-
-    rslt = stream_sensor_data_forced_mode(&dev);
-    if (rslt != BME280_OK) {
-        fprintf(stderr, "Failed to stream sensor data (code %+d).\n", rslt);
-        exit(1);
-    }
-
-    return hum;
-}
 
 /*!
  * @brief This function reading the sensor's registers through I2C bus.
