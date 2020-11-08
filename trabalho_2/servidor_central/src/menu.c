@@ -85,6 +85,8 @@ void menu(){
             printf("Opcao invalida, por favor escolha uma opcao listada no menu, grato.\n");
         }
 
+        status_disp();
+
         if (buffer == 0)
             break;
 
