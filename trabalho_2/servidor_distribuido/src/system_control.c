@@ -3,7 +3,6 @@
 int sock_fd, conect_fd;
 
 void init_server(){
-
     struct sockaddr_in servaddr;
 
     sock_fd = socket(AF_INET, SOCK_STREAM, 0); 
@@ -40,7 +39,6 @@ void init_server(){
 
 /*
 void mock_json(char *msg) {
-
     FILE *arq;
     char Linha[100];
     char *result;
@@ -72,7 +70,6 @@ void mock_json(char *msg) {
 */
 
 void get_json(int* lamp, int* air){
-
     char buffer[MAX_MSG];
 
     //pega msg do socket
@@ -134,7 +131,6 @@ int status_sensor(){
 }
 
 void *server_listen(void* args){
-    
     // Accept the data packet from client and verification 
     conect_fd = accept(sock_fd, NULL, NULL); 
     
@@ -146,7 +142,7 @@ void *server_listen(void* args){
         else{
             printf("server acccept the client...\n"); 
             
-            sleep(0.100);
+            sleep(0.120);
             get_json(lamp, air);
 
             int i;
@@ -170,14 +166,13 @@ void *server_listen(void* args){
     }
 }
 
+double *data;
+
+//data[0]=temp;
+//data[1]=hum;
+data = get_data();
+
 void maintain_data_csv(){
-
-    double *data;
-
-    //data[0]=temp;
-    //data[1]=hum;
-    data = get_data();
-    
     // enviar sevidor central
     int i;
     for (i=0;i<2;i++)
@@ -212,5 +207,19 @@ void *init_maintain_data(void *args){
     while(1){
         sleep(1);
         maintain_data_csv();
+    }
+}
+
+void *server_write(void* args){
+    char message[MAX_MSG];
+
+    while (1){
+        sleep(0.110);
+
+        sprintf(message,
+        "{ \"lamp_1\": %d, \"lamp_2\": %d, \"lamp_3\": %d,\n \"lamp_4\": %d, \"air_1\": %d, \"air_2\": %d, \"temp\": %0.2lf,  \"hum\": %0.2lf,  \"alarm\": %d }",
+        lamp[0], lamp[1], lamp[2], lamp[3], air[0], air[1], data[0], data[1], status_sensor() );
+
+        write(sock_fd, NULL, NULL); 
     }
 }

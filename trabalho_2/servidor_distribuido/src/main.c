@@ -7,7 +7,7 @@
 
 int main(int argc, const char * argv[]){
 
-    pthread_t control_thread[2];
+    pthread_t control_thread[3];
     
     signal(SIGINT, interrupt_system);
 
@@ -20,6 +20,9 @@ int main(int argc, const char * argv[]){
 
     pthread_create (&control_thread[1], NULL, init_maintain_data, NULL);
     pthread_join(control_thread[1], NULL);
+
+    pthread_create (&control_thread[2], NULL, server_write, NULL);
+    pthread_join(control_thread[2], NULL);
 
     return 0;
 

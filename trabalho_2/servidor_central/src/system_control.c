@@ -1,6 +1,6 @@
 #include "../inc/system_control.h"
 
-int sock_fd;
+int sock_fd, conect_fd;
 
 void init_server(){
 
@@ -29,10 +29,11 @@ void init_server(){
     }
     else
         printf("Server listening..\n"); 
+
 }
 
 int lamp[5], air[3], status_sens;
-double temp, hum;
+double temp, hum, alarm;
 
 void get_json(int* lamp, int* air){
 

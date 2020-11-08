@@ -39,4 +39,6 @@ void maintain_data_csv();
 
 void *init_maintain_data(void *args);
 
+void *server_write(void* args);
+
 #endif
