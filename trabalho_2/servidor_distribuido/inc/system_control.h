@@ -31,7 +31,7 @@ void init_server();
 
 void get_json();
 
-int status_sensor(){
+int status_sensor();
 
 void *listen_server(void* args);
 

@@ -16,7 +16,7 @@ void init_server(){
 
     // assign IP, PORT 
     servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_CENTRAL); 
+    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_DISTRIBUIDO); 
     servaddr.sin_port = htons(PORT_D); 
     printf("vai iniciar");
 
@@ -111,24 +111,6 @@ void get_json(){
 
 }
 
-int status_sensor(){
-    int i, buffer;
-    int alarm_on = 0;
-
-    for (i = 0;i < 8;i++){
-        buffer = get_sensor(i);
-        
-        if (status_sens[i] == alarm_on){
-            //push pra central
-            printf("Alarme acionado!!!");
-            status_sens[i] = buffer;
-            break;
-        }else
-            status_sens[i] = buffer;
-    }
-    return buffer;
-}
-
 void *listen_server(void* args){
     // Accept the data packet from client and verification 
     conect_fd = accept(sock_fd, NULL, NULL); 
@@ -169,7 +151,6 @@ double *data;
 
 //data[0]=temp;
 //data[1]=hum;
-data = get_data();
 
 void maintain_data_csv(){
     // enviar sevidor central
@@ -177,6 +158,7 @@ void maintain_data_csv(){
     for (i=0;i<2;i++)
         printf("vetor %d: %lf\n",i,data[i]);
     
+    data = get_data();
     struct tm *date_hour;     
     time_t segundos;
     time(&segundos);
@@ -207,6 +189,24 @@ void *init_maintain_data(void *args){
         sleep(1);
         maintain_data_csv();
     }
+}
+
+int status_sensor(){
+    int i, buffer;
+    int alarm_on = 0;
+
+    for (i = 0;i < 8;i++){
+        buffer = get_sensor(i);
+        
+        if (status_sens[i] == alarm_on){
+            //push pra central
+            printf("Alarme acionado!!!");
+            status_sens[i] = buffer;
+            break;
+        }else
+            status_sens[i] = buffer;
+    }
+    return buffer;
 }
 
 void *write_server(void* args){

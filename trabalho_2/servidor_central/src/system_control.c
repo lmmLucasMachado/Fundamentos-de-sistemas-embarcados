@@ -16,8 +16,8 @@ void init_server(){
 
     // assign IP, PORT 
     servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_DISTRIBUIDO); 
-    servaddr.sin_port = htons(PORT_D); 
+    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_CENTRAL); 
+    servaddr.sin_port = htons(PORT_C); 
     printf("vai iniciar");
 
     // Now server is ready to listen and verification 
