@@ -1,7 +1,7 @@
 #include "../inc/menu.h"
 
 void menu(){
-    int buffer = 0, alarm, lamp;
+    int buffer = 0, lamp;
     double temp_wish;
     //menu
     do{
@@ -35,7 +35,7 @@ void menu(){
 
                 scanf("%d", &lamp);
 
-                if (lamp < 0 || lamp > 6)
+                if (lamp < 0 && lamp > 6)
                     printf("Opcao invalida por favor escolha um numero entre 0 e 6.\n");
                 else{
                     set_disp_wish(lamp);
@@ -95,13 +95,13 @@ void menu(){
 
 void status_disp(){
     int *lamp, *air;
-    int alarm;
+    int alarm_;
     double temp, hum;
     
     lamp = get_lamp();
     air = get_air();
 
-    alarm = get_alarm();
+    alarm_ = get_alarm();
     temp = get_temp();
     hum = get_hum();
 
@@ -111,6 +111,11 @@ void status_disp(){
     printf("Lampada quarto 1:  %d          Lampada quarto 2: %d\n", lamp[2], lamp[3]);
     printf("Ar-condicionado 1: %d          Ar-condicionado 2: %d\n", air[0], air[1]);
     printf("Temperatura:       %0.2lf      Umidade: %0.2lf\n", temp, hum);
-
+    
+    if (alarm_ == 0)
+        printf("\nAlarme ligado!!!\n");
+    else 
+        printf("\nAlarme Desligado!\n");
+        
 }
 

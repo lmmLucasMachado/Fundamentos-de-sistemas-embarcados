@@ -3,8 +3,6 @@
 int sock_fd, conect_fd;
 
 void init_server(){
-
-    int conect_fd;
     struct sockaddr_in servaddr;
 
     sock_fd = socket(AF_INET, SOCK_STREAM, 0); 
@@ -32,7 +30,7 @@ void init_server(){
 
 }
 
-int lamp[5], air[3], alarm;
+int lamp[5], air[3], alarm_;
 double temp, hum;
 
 void get_json(){
@@ -81,7 +79,7 @@ void get_json(){
 
     // get status alarm
     item = cJSON_GetObjectItemCaseSensitive(json, "alarm");
-    alarm = cJSON_GetNumberValue(item);
+    alarm_ = cJSON_GetNumberValue(item);
 
     cJSON_Delete(json);
 
@@ -96,12 +94,12 @@ double get_hum(){
 }
 
 int get_alarm(){
-    return alarm;
+    return alarm_;
 }
 
-double *get_lamp(){
+int *get_lamp(){
 
-    double *data = (double*)malloc(4*sizeof(double));
+    int *data = (int*)malloc(4*sizeof(int));
 
     data[0] = lamp[0];
     data[1] = lamp[1];
@@ -111,9 +109,9 @@ double *get_lamp(){
     return data;
 }
 
-double *get_air(){
+int *get_air(){
 
-    double *data = (double*)malloc(2*sizeof(double));
+    int *data = (int*)malloc(2*sizeof(int));
 
     data[0] = air[0];
     data[1] = air[1];
@@ -129,12 +127,10 @@ void set_temp_wish(double temp_w){
 }
 
 int control_air(){
-    if ((temp_wish - 1) < temp )
-        return 1;
-    else if ((temp_wish + 1) > temp )
-        return 1;
-    else 
+    if ((temp_wish - 1) < temp  && (temp_wish + 1) > temp) 
         return 0;
+    else 
+        return 1;
 }
 
 int disp_wish;
@@ -147,7 +143,7 @@ void set_alarm(int alarm_w){
     if (alarm_w != 1|| alarm_w != 0)
         printf("Opcao invalida!");
     else
-        alarm = alarm_w;
+        alarm_ = alarm_w;
 }
 
 void *server_listen(void* args){
@@ -167,15 +163,28 @@ void *server_listen(void* args){
 
 void *server_write(void* args){
     char message[MAX_MSG];
-    int disp_wish;
+    int air_1, air_2;
 
     while (1){
         sleep(0.110);
 
+        if (disp_wish > 4 && disp_wish < 6 && control_air() != 0){
+            if (disp_wish == 5)
+                air_1 = 0;
+            else
+                air_2 = 0;
+        }else
+            lamp[disp_wish - 1] = 0;
+
+        if (control_air() == 0){
+            air_1 = 0;
+            air_2 = 0;
+        }
+        
         sprintf(message,
         "{ \"lamp_1\": %d, \"lamp_2\": %d, \"lamp_3\": %d,\n \"lamp_4\": %d, \"air_1\": %d, \"air_2\": %d }",
-        lamp[0], lamp[1], lamp[2], lamp[3], control_air(), control_air());
+        lamp[0], lamp[1], lamp[2], lamp[3], air_1, air_2);
 
-        write(sock_fd, NULL, NULL); 
+        write(sock_fd, message, sizeof(message)); 
     }
 }

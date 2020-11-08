@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h> 
 #include <sys/types.h> 
+#include <arpa/inet.h>
 
 #include "../inc/cJSON.h"
 #include "../inc/interrupt_system.h"
@@ -35,9 +36,9 @@ double get_hum();
 
 int get_alarm();
 
-double *get_lamp();
+int *get_lamp();
 
-double *get_air();
+int *get_air();
 
 void set_temp_wish(double temp_w);
 

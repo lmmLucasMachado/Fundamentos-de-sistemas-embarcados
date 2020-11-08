@@ -5,10 +5,10 @@
 
 #include "../inc/system_control.h"
 
-int main(int argc, const char * argv[]){
+pthread_t control_thread[2];
 
-    pthread_t control_thread[2];
-    
+int main(int argc, const char * argv[]){
+        
     signal(SIGINT, interrupt_system);
 
     init_server();
