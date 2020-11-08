@@ -31,14 +31,14 @@ void init_server();
 
 void get_json();
 
-int status_sensor(int *status_sens){
+int status_sensor(){
 
-void *server_listen(void* args);
+void *listen_server(void* args);
 
 void maintain_data_csv();
 
 void *init_maintain_data(void *args);
 
-void *server_write(void* args);
+void *write_server(void* args);
 
 #endif

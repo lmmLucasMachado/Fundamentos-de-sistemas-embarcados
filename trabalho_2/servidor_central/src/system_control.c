@@ -37,7 +37,7 @@ void get_json(){
     char buffer[MAX_MSG];
 
     //pega msg do socket
-    read(sock_fd, buffer, MAX_MSG);
+    read(sock_fd, buffer, sizeof(buffer));
 
     printf("Menssage:\n %s", buffer);
 

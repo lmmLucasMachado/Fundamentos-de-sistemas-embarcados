@@ -75,9 +75,9 @@ void get_json(){
     char buffer[MAX_MSG];
 
     //pega msg do socket
-    read(sock_fd, buffer, MAX_MSG);
+    read(sock_fd, buffer, sizeof(buffer));
 
-    printf("Menssage:\n %s", buffer);
+    printf("Menssage receive:\n %s", buffer);
 
     //mock_json(buffer);
     
@@ -118,19 +118,18 @@ int status_sensor(){
     for (i = 0;i < 8;i++){
         buffer = get_sensor(i);
         
-        if (status_sens[i] = alarm_on){
+        if (status_sens[i] == alarm_on){
             //push pra central
             printf("Alarme acionado!!!");
             status_sens[i] = buffer;
             break;
-        }else{
+        }else
             status_sens[i] = buffer;
-        }
     }
     return buffer;
 }
 
-void *server_listen(void* args){
+void *listen_server(void* args){
     // Accept the data packet from client and verification 
     conect_fd = accept(sock_fd, NULL, NULL); 
     
@@ -210,7 +209,7 @@ void *init_maintain_data(void *args){
     }
 }
 
-void *server_write(void* args){
+void *write_server(void* args){
     char message[MAX_MSG];
 
     while (1){
@@ -220,6 +219,6 @@ void *server_write(void* args){
         "{ \"lamp_1\": %d, \"lamp_2\": %d, \"lamp_3\": %d,\n \"lamp_4\": %d, \"air_1\": %d, \"air_2\": %d, \"temp\": %0.2lf,  \"hum\": %0.2lf,  \"alarm\": %d }",
         lamp[0], lamp[1], lamp[2], lamp[3], air[0], air[1], data[0], data[1], status_sensor() );
 
-        write(sock_fd, NULL, NULL); 
+        write(sock_fd, message, sizeof(message)); 
     }
 }
