@@ -12,6 +12,7 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 
+#include "../inc/cJSON.h"
 #include "../inc/interrupt_system.h"
 #include "../inc/menu.h"
 
