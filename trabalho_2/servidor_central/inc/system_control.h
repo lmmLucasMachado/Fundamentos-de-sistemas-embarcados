@@ -26,14 +26,24 @@
 
 void init_server();
 
-void get_json(int* lamp, int* air);
+void get_json();
 
-void status_sensor(int *status);
+double get_temp();
 
-void *server_listen(void* args);
+double get_hum();
 
-void maintain_data_csv();
+int get_alarm();
 
-void *init_maintain_data(void *args);
+double *get_lamp();
+
+double *get_air();
+
+void set_temp_wish(double temp_w);
+
+int control_air();
+
+void set_disp_wish(int disp_w);
+
+void set_alarm(int alarm_w);
 
 #endif

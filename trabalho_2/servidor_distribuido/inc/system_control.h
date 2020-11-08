@@ -29,7 +29,7 @@
 
 void init_server();
 
-void get_json(int* lamp, int* air);
+void get_json();
 
 int status_sensor(int *status_sens){
 

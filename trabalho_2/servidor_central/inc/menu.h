@@ -10,4 +10,6 @@
 
 void menu();
 
+void status_disp();
+
 #endif

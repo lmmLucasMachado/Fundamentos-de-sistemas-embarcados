@@ -187,8 +187,8 @@ double *get_data() {
 
     double *data = (double*)malloc(2*sizeof(double));
 
-    data[0]=temp;
-    data[1]=hum;
+    data[0] = temp;
+    data[1] = hum;
 
     return data;
 
