@@ -12,12 +12,19 @@ int main(int argc, const char * argv[]){
     signal(SIGINT, interrupt_system);
 
     init_server();
+    sleep(5);
 
-    pthread_create (&control_thread[0], NULL, server_listen, NULL);
-    pthread_join(control_thread[0], NULL);
+    //pthread_create (&control_thread[0], NULL, server_listen, NULL);
+    //pthread_join(control_thread[0], NULL);
 
-    pthread_create (&control_thread[1], NULL, server_write, NULL);
-    pthread_join(control_thread[1], NULL);
+    //pthread_create (&control_thread[1], NULL, server_write, NULL);
+    //pthread_join(control_thread[1], NULL);
+
+   while(1){
+	   server_listen();
+	   menu();
+	   server_write();
+    }
 
     return 0;
 

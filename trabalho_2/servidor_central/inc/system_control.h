@@ -48,8 +48,8 @@ void set_disp_wish(int disp_w);
 
 void set_alarm(int alarm_w);
 
-void *server_listen(void* args);
+void server_listen();
 
-void *server_write(void* args);
+void server_write();
 
 #endif
