@@ -4,7 +4,7 @@ void menu(){
     int buffer = 0, lamp;
     double temp_wish;
     //menu
-    do{
+    //do{
         status_disp();
 
         printf("-----------------  Menu  -----------------\n");
@@ -18,8 +18,8 @@ void menu(){
 
         if (buffer == 0){
             printf("Opcao escolhida \"0\", fechar programa.\nObrigado. \n");
-
-            break;
+	    exit(0);
+//            break;
         }else if (buffer == 1){
             do{
                 printf("Opcao escolhida \"1\", acionar lampadas ou arcondicionado.\n");
@@ -87,10 +87,12 @@ void menu(){
 
         status_disp();
 
-        if (buffer == 0)
-            break;
+        if (buffer == 0){
+    	     exit(0);
+	     //break;
+	}
 
-    }while(1);
+    //}while(1);
 }
 
 void status_disp(){
