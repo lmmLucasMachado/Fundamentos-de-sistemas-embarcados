@@ -50,6 +50,6 @@ void set_alarm(int alarm_w);
 
 void server_listen();
 
-void server_write();
+void server_write(int signal);
 
 #endif

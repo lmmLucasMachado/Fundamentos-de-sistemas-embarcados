@@ -10,7 +10,8 @@ pthread_t control_thread[2];
 int main(int argc, const char * argv[]){
         
     signal(SIGINT, interrupt_system);
-
+    signal(SIGALRM, server_write);
+    alarm(1);
     init_server();
     sleep(5);
 
@@ -23,7 +24,7 @@ int main(int argc, const char * argv[]){
    while(1){
 	   server_listen();
 	   menu();
-	   server_write();
+	   
     }
 
     return 0;

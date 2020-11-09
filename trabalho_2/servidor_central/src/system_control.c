@@ -159,33 +159,56 @@ void server_listen(){
         }
     //}
 }
+int sock_fd2;
+void server_write(int signal){
+    struct sockaddr_in servaddr;
 
-void server_write(){
+    sock_fd2 = socket(AF_INET, SOCK_STREAM, 0); 
+
+    if (sock_fd2 == -1)
+        printf("socket creation failed...\n"); 
+    else
+        printf("Socket successfully created..\n"); 
+    
+    bzero(&servaddr, sizeof(servaddr)); 
+
+    // assign IP, PORT 
+    servaddr.sin_family = AF_INET; 
+    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_CENTRAL);
+    servaddr.sin_port = htons(PORT_D); 
+
     char message[MAX_MSG];
+    printf("\nEscrevendo\n");
+    
+    int err = connect(sock_fd2, (struct sockaddr*)&servaddr, sizeof(servaddr));
+    if(err < 0) {
+        close(sock_fd2);
+    }
+    
     int air_1, air_2;
 
-    printf("write");
-   // while (1){
-        sleep(0.110);
-
-	//menu();
-        if (disp_wish > 4 && disp_wish < 6 && control_air() != 0){
-            if (disp_wish == 5)
-                air_1 = 0;
-            else
-                air_2 = 0;
-        }else
-            lamp[disp_wish - 1] = 0;
-
-        if (control_air() == 0){
+    if (disp_wish > 4 && disp_wish < 6 && control_air() != 0){
+        if (disp_wish == 5)
             air_1 = 0;
+        else
             air_2 = 0;
-        }
-        
-        sprintf(message,
-        "{ \"lamp_1\": %d, \"lamp_2\": %d, \"lamp_3\": %d,\n \"lamp_4\": %d, \"air_1\": %d, \"air_2\": %d }",
-        lamp[0], lamp[1], lamp[2], lamp[3], air_1, air_2);
+    }else
+        lamp[disp_wish - 1] = 0;
 
-        write(sock_fd, message, sizeof(message)); 
-    //}
+    if (control_air() == 0){
+        air_1 = 0;
+        air_2 = 0;
+    }
+    
+    sprintf(message,
+    "{ \"lamp_1\": %d, \"lamp_2\": %d, \"lamp_3\": %d,\n \"lamp_4\": %d, \"air_1\": %d, \"air_2\": %d }",
+    lamp[0], lamp[1], lamp[2], lamp[3], air_1, air_2);
+
+    send(sock_fd, message, MAX_MSG,0);
+
+    close(sock_fd2);
+
+    alarm(1);
 }
+
+
