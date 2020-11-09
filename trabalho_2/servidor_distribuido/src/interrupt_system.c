@@ -8,12 +8,15 @@ void interrupt_system(int signal) {
 
     extern pthread_t control_thread[3];
     // stop threads
-    for(i = 0;i < 3;i++)
+    for(i = 0;i < 2;i++)
         pthread_cancel(control_thread[i] );
 
     // Close Socket
     extern int sock_fd;
     close(sock_fd);
+
+    extern int sock_fd2;
+    close(sock_fd2);
 
     // Off GPIO
     for(i = 0;i < 6;i++)

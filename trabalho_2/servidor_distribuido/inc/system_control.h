@@ -27,18 +27,18 @@
 #define SERVIDOR_DISTRIBUIDO "192.168.0.52"
 #define SERVIDOR_CENTRAL "192.168.0.53"
 
-void init_server();
+void init_server_listen();
 
 void get_json();
 
 int status_sensor();
 
-void listen_server();
-
 void maintain_data_csv();
 
-void init_maintain_data();
+void init_maintain_data(void *args);
 
-void write_server();
+void listen_server(void *args);
+
+void server_write(int signal);
 
 #endif
