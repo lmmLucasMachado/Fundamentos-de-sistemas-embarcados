@@ -16,9 +16,8 @@ void init_server(){
 
     // assign IP, PORT 
     servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_DISTRIBUIDO); 
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servaddr.sin_port = htons(PORT_D); 
-    printf("vai iniciar");
 
     // Binding newly created socket to given IP and verification 
     if ((bind(sock_fd, (SA*)&servaddr, sizeof(servaddr))) != 0) { 
@@ -34,7 +33,10 @@ void init_server(){
         exit(0); 
     }
     else
-        printf("Server listening..\n"); 
+        printf("Server listening..\n");
+
+    conect_fd = accept(sock_fd, NULL, NULL); 
+
 }
 
 /*
@@ -81,7 +83,7 @@ void get_json(){
 
     //mock_json(buffer);
     
-    printf("%s\n",buffer);
+    printf("messge receive : %s\n",buffer);
     
     cJSON *json = cJSON_Parse(buffer);
 
@@ -111,54 +113,22 @@ void get_json(){
 
 }
 
-void *listen_server(void* args){
-    // Accept the data packet from client and verification 
-    conect_fd = accept(sock_fd, NULL, NULL); 
-    
-    while(1){
-        if (conect_fd < 0) { 
-            printf("server acccept failed...\n"); 
-            exit(0); 
-        } 
-        else{
-            printf("server acccept the client...\n"); 
-            
-            sleep(0.120);
-            get_json();
-
-            int i;
-            // lamp on/off
-            //printf("\nAQUI\n");
-            for(i = 0;i < 4;i++){
-                if (lamp[i] == 0)
-                    set_high_gpio(i);
-                else if(lamp[i] == 1)
-                    set_low_gpio(i);
-            }
-
-            // air on/off
-            for(i = 0;i < 2;i++){
-                if (air[i] == 0)
-                    set_high_gpio(i + 4);
-                else if(air[i] == 1)
-                    set_low_gpio(i + 4);
-            }
-        }
-    }
-}
-
 double *data;
-
-//data[0]=temp;
-//data[1]=hum;
+double temp, hum;
 
 void maintain_data_csv(){
     // enviar sevidor central
+/*
     int i;
     for (i=0;i<2;i++)
         printf("vetor %d: %lf\n",i,data[i]);
-    
+*/  
     data = get_data();
+    temp = data[0];
+    hum = data[1];
+    //printf("%lf %lf ", temp, hum);
+    free(data);
+
     struct tm *date_hour;     
     time_t segundos;
     time(&segundos);
@@ -169,7 +139,7 @@ void maintain_data_csv(){
     p_file = fopen ("./doc/data.csv", "a+");
     fprintf(p_file,"\"%d/%d/%d\",", date_hour->tm_mday, date_hour->tm_mon+1,date_hour->tm_year+1900);
     fprintf(p_file,"\"%d:%d:%d\",", date_hour->tm_hour, date_hour->tm_min, date_hour->tm_sec);
-    fprintf(p_file, "\"%0.2lf\",\"%0.2lf\"\n", data[0], data[1]);
+    fprintf(p_file, "\"%0.2lf\",\"%0.2lf\"\n", temp, hum);
     fprintf(p_file, "\"%d\",\"%d\",\"%d\",\"%d\",", lamp[0],lamp[1],lamp[2],lamp[3]);
     fprintf(p_file, "\"%d\",\"%d,\"%d\",\"%d\",\"%d\",\"%d\",", air[0],air[1],status_sens[0],status_sens[1],status_sens[2],status_sens[3]);
     fprintf(p_file, "\"%d\",\"%d,\"%d\",\"%d\"\n", status_sens[4],status_sens[5],status_sens[6],status_sens[7]);
@@ -179,16 +149,18 @@ void maintain_data_csv(){
     //printf("\n\nEscrevendo csv\n\n");
 }
 
-void *init_maintain_data(void *args){
+void init_maintain_data(){
+    printf("mantendo");
+
     FILE *p_file;
     p_file = fopen ("./doc/data.csv", "w+");
     fprintf(p_file, "\"Data\",\"Hora\",\"Temperatura\",\"Umidade\",\"Lampada Cozinha\",\"Lampada Sala\",\"Lampada Quarto 1\",\"Lampada Quarto 2\",\"Ar-condicionado 1\",\"Ar-condicionado 2\",\"Sensor presenca sala\",\"Sensor presenca Cozinha\",\"Prota cozinha\",\"Janela cozinha\",\"Prota sala\",\"Janela sala\",\"Janela quarto 1\",\"Janela quarto 2\"\n");
     fclose(p_file);
 
-    while(1){
-        sleep(1);
-        maintain_data_csv();
-    }
+    //while(1){
+        //sleep(1);
+        //maintain_data_csv();
+    //}
 }
 
 int status_sensor(){
@@ -209,16 +181,64 @@ int status_sensor(){
     return buffer;
 }
 
-void *write_server(void* args){
-    char message[MAX_MSG];
+void write_server(){
+    printf("\nEscrevendo\n");
+    if (conect_fd < 0) {
+        printf("server acccept failed...\n"); 
+        exit(0); 
+    }
+    else
+        printf("server acccept the client...\n"); 
+    
+    char message[1024];
 
-    while (1){
-        sleep(0.110);
+    //while (1){
+        //sleep(0.110);
 
         sprintf(message,
         "{ \"lamp_1\": %d, \"lamp_2\": %d, \"lamp_3\": %d,\n \"lamp_4\": %d, \"air_1\": %d, \"air_2\": %d, \"temp\": %0.2lf,  \"hum\": %0.2lf,  \"alarm\": %d }",
-        lamp[0], lamp[1], lamp[2], lamp[3], air[0], air[1], data[0], data[1], status_sensor() );
+        lamp[0], lamp[1], lamp[2], lamp[3], air[0], air[1], temp, hum, status_sensor() );
 
+        //printf("\n%s\n",message);
         write(sock_fd, message, sizeof(message)); 
-    }
+    //}
+    printf("\nTeminnei de escrever\n");
+    
+}
+
+
+void listen_server(){
+    // Accept the data packet from client and verification 
+    printf("\nLendo\n");
+    
+    //while(1){
+        if (conect_fd < 0) { 
+            printf("server acccept failed...\n"); 
+            exit(0); 
+        }
+        else
+            printf("server acccept the client...\n"); 
+            
+        sleep(0.120);
+        get_json();
+
+        int i;
+        // lamp on/off
+        //printf("\nAQUI\n");
+        for(i = 0;i < 4;i++){
+            if (lamp[i] == 0)
+                set_high_gpio(i);
+            else if(lamp[i] == 1)
+                set_low_gpio(i);
+        }
+
+        // air on/off
+        for(i = 0;i < 2;i++){
+            if (air[i] == 0)
+                set_high_gpio(i + 4);
+            else if(air[i] == 1)
+                set_low_gpio(i + 4);
+        }
+    
+    //}
 }

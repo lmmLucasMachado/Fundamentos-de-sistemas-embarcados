@@ -33,12 +33,12 @@ void get_json();
 
 int status_sensor();
 
-void *listen_server(void* args);
+void listen_server();
 
 void maintain_data_csv();
 
-void *init_maintain_data(void *args);
+void init_maintain_data();
 
-void *write_server(void* args);
+void write_server();
 
 #endif
