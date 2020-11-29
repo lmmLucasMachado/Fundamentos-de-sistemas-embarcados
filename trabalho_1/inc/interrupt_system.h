@@ -11,6 +11,7 @@
 #include "../inc/gpio.h"
 #include "../inc/uart.h"
 #include "../inc/bme280_temp.h"
+#include "../inc/control.h"
 
 
 void interrupt_system(int signal);

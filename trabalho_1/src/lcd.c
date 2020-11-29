@@ -14,7 +14,7 @@ void post_lcd_temperatures(float temp_in, float temp_out, float temp_re){
     //printf("Temperature inside %f\n", temp_in);
 
     char line1[255];
-    sprintf(line1, "TI:%0.2f TE:%0.2f", temp_in, temp_out);
+    sprintf(line1, "TI:%0.2f TE:%0.2f",  temp_out,temp_in);
 
     char line2[255];
     sprintf(line2, "TR: %0.2f ", temp_re);
