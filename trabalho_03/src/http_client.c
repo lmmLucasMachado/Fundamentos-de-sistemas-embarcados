@@ -4,12 +4,16 @@
 #include "esp_http_client.h"
 #include "esp_log.h"
 #include "esp_system.h"
+#include "freertos/task.h"
+
 
 #include "http_client.h"
 #include "./cJSON.h"
 
 #define TAG "HTTP"
-#define MAX_MSG 5000
+
+static char response[MAX_MSG];
+double temp_atual, temp_max, temp_min, humidity;
 
 esp_err_t _http_event_handle(esp_http_client_event_t *evt)
 {
@@ -29,13 +33,13 @@ esp_err_t _http_event_handle(esp_http_client_event_t *evt)
             break;
         case HTTP_EVENT_ON_DATA:
             ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
-            if (!esp_http_client_is_chunked_response(evt->client)) {
+            if (!esp_http_client_is_chunked_response(evt->client))
                 printf("%.*s", evt->data_len, (char*)evt->data);
-            }
-
             break;
         case HTTP_EVENT_ON_FINISH:
+            esp_http_client_read(evt->client, response, MAX_MSG);
             ESP_LOGI(TAG, "HTTP_EVENT_ON_FINISH");
+            get_json();
             break;
         case HTTP_EVENT_DISCONNECTED:
             ESP_LOGI(TAG, "HTTP_EVENT_DISCONNECTED");
@@ -44,7 +48,7 @@ esp_err_t _http_event_handle(esp_http_client_event_t *evt)
     return ESP_OK;
 }
 
-void http_request(){
+void http_request_ip(){
     esp_http_client_config_t config = {
         .url = "http://api.ipstack.com/check?access_key=eead118251aa33d80ccd722e5103dbaa",
         .event_handler = _http_event_handle,
@@ -80,26 +84,25 @@ void https_request()
 }
 
 //Exemplo de leitura json pois não vai dar tempo 
-double temp_atual, temp_maxima, temp_minima, humidity;
 
 void get_json(){
-    char buffer[MAX_MSG];
-    cJSON *json = cJSON_Parse(buffer);
+    cJSON *json = cJSON_Parse(response);
 
     cJSON* item;
+
+    item = cJSON_GetObjectItemCaseSensitive(json, "temp_max");
+    temp_max = cJSON_GetNumberValue(item);
 
     item = cJSON_GetObjectItemCaseSensitive(json, "temp");
     temp_atual = cJSON_GetNumberValue(item);
 
-    item = cJSON_GetObjectItemCaseSensitive(json, "temp_max");
-    temp_maxima = cJSON_GetNumberValue(item);
-
     item = cJSON_GetObjectItemCaseSensitive(json, "temp_min");
-    temp_minima = cJSON_GetNumberValue(item);
-
-    item = cJSON_GetObjectItemCaseSensitive(json, "humidity");
-    humidity = cJSON_GetNumberValue(item);
+    temp_min = cJSON_GetNumberValue(item);
 
     cJSON_Delete(json);
+    printf("Temp_Max: %lf, Temp_atual: %lf, Temp_min: %lf", temp_max, temp_atual, temp_min);
+    fflush(stdout);
+
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
 
 }

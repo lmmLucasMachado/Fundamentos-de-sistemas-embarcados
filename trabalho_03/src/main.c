@@ -18,7 +18,7 @@ void RealizaHTTPRequest(void * params)
     if(xSemaphoreTake(conexaoWifiSemaphore, portMAX_DELAY))
     {
       ESP_LOGI("Main Task", "Realiza HTTP Request");
-      http_request();
+      http_request_ip();
       //https_request();
     }
   }

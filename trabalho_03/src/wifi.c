@@ -1,5 +1,3 @@
-#include "wifi.h"
-
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -10,8 +8,13 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 
+#include "sdkconfig.h"
+#include "driver/gpio.h"
+
 #include "lwip/err.h"
 #include "lwip/sys.h"
+
+#include "wifi.h"
 
 #define WIFI_SSID      CONFIG_ESP_WIFI_SSID
 #define WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD
@@ -21,17 +24,22 @@
 #define WIFI_FAIL_BIT      BIT1
 
 #define TAG "Wifi"
+#define LED 2
 
 static EventGroupHandle_t s_wifi_event_group;
 
 static int s_retry_num = 0;
 extern xSemaphoreHandle conexaoWifiSemaphore;
 
+int status = 0;
+
+
 static void event_handler(void* arg, esp_event_base_t event_base,
                                 int32_t event_id, void* event_data)
 {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
         esp_wifi_connect();
+
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
         if (s_retry_num < WIFI_MAXIMUM_RETRY) {
             esp_wifi_connect();
@@ -52,6 +60,9 @@ static void event_handler(void* arg, esp_event_base_t event_base,
 
 void wifi_start(){
 
+    gpio_pad_select_gpio(LED);
+    gpio_set_direction(LED, GPIO_MODE_OUTPUT);
+
     s_wifi_event_group = xEventGroupCreate();
 
     ESP_ERROR_CHECK(esp_netif_init());
@@ -71,6 +82,7 @@ void wifi_start(){
             .password = WIFI_PASS
         },
     };
+    
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) );
     ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config) );
     ESP_ERROR_CHECK(esp_wifi_start() );
@@ -90,12 +102,20 @@ void wifi_start(){
     if (bits & WIFI_CONNECTED_BIT) {
         ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
                  WIFI_SSID, WIFI_PASS);
-                 
+        gpio_set_level(LED, 1);
+ 
     } else if (bits & WIFI_FAIL_BIT) {
         ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
                  WIFI_SSID, WIFI_PASS);
+        int i = 0;
+        for(i=0 ; i<5 ; i++){
+            gpio_set_level(LED, status);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            status = !status;
+        }
     } else {
         ESP_LOGE(TAG, "UNEXPECTED EVENT");
+        gpio_set_level(LED, 0);
     }
 
     ESP_ERROR_CHECK(esp_event_handler_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler));
