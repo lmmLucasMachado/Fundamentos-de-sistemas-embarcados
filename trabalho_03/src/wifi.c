@@ -90,6 +90,7 @@ void wifi_start(){
     if (bits & WIFI_CONNECTED_BIT) {
         ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
                  WIFI_SSID, WIFI_PASS);
+                 
     } else if (bits & WIFI_FAIL_BIT) {
         ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
                  WIFI_SSID, WIFI_PASS);
