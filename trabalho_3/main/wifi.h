@@ -1,5 +1,5 @@
-#ifndef WIFI__H
-#define WIFI__H
+#ifndef WIFI_H
+#define WIFI_H
 
 void wifi_start();
 

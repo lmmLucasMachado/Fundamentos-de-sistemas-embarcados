@@ -1,4 +1,3 @@
-
 menu "Configuração do Wifi Configuration"
 
     config ESP_WIFI_SSID
@@ -13,10 +12,9 @@ menu "Configuração do Wifi Configuration"
         help
             Senha do WiFi (WPA or WPA2).
 
-    config WIFI_MAXIMUM_RENTRY
-        INT "Número máximo de tentativas de conexão"
+    config ESP_MAXIMUM_RETRY
+        int "Número máximo de tentativas de conexão"
         default 5
         help
-            Configure o valor maximo de tentativas
-
+            Configure o valor máximo de tentativas de conexão.
 endmenu
