@@ -146,21 +146,26 @@ void set_alarm(int alarm_w){
 }
 
 void server_listen(){
-    //while(1){
+    while(1){
         if (conect_fd < 0) { 
             printf("server acccept failed...\n"); 
             exit(0); 
         } 
         else{
             //printf("server acccept the client...\n"); 
-            
             sleep(0.120);
             get_json();
         }
-    //}
+    }
 }
+
 int sock_fd2;
+
 void server_write(int signal){
+
+    // Call menu
+    menu();
+    
     struct sockaddr_in servaddr;
 
     sock_fd2 = socket(AF_INET, SOCK_STREAM, 0); 
@@ -187,7 +192,7 @@ void server_write(int signal){
     
     int air_1, air_2;
 
-    if (disp_wish > 4 && disp_wish < 6 && control_air() != 0){
+    if (disp_wish > 4 && disp_wish < 7 && control_air() != 0){
         if (disp_wish == 5)
             air_1 = 0;
         else
@@ -208,7 +213,39 @@ void server_write(int signal){
 
     close(sock_fd2);
 
+    // Mantendo dados CSV
+    maintain_data_csv();
+
     alarm(1);
 }
 
+void init_maintain_data(){
+    printf("mantendo");
 
+    FILE *p_file;
+    p_file = fopen ("./doc/data.csv", "w+");
+    fprintf(p_file, "\"Data\",\"Hora\",\"Temperatura\",\"Umidade\",\"Lampada Cozinha\",\"Lampada Sala\",\"Lampada Quarto 1\",\"Lampada Quarto 2\",\"Ar-condicionado 1\",\"Ar-condicionado 2\",\"Alarme\"\n");
+    fclose(p_file);
+
+}
+
+void maintain_data_csv(){
+    struct tm *date_hour;     
+    time_t segundos;
+    time(&segundos);
+
+    date_hour = localtime(&segundos);  
+
+    FILE *p_file;
+    p_file = fopen ("./doc/data.csv", "a+");
+    fprintf(p_file,"\"%d/%d/%d\",", date_hour->tm_mday, date_hour->tm_mon+1,date_hour->tm_year+1900);
+    fprintf(p_file,"\"%d:%d:%d\",", date_hour->tm_hour, date_hour->tm_min, date_hour->tm_sec);
+    fprintf(p_file, "\"%0.2lf\",\"%0.2lf\"\n", temp, hum);
+    fprintf(p_file, "\"%d\",\"%d\",\"%d\",\"%d\",", lamp[0],lamp[1],lamp[2],lamp[3]);
+    fprintf(p_file, "\"%d\",\"%d,\"%d\",\"%d\",\"%d\",\"%d\",", air[0],air[1],alarm_);
+    
+    fclose(p_file);
+
+    //printf("\n\nEscrevendo csv\n\n");
+    alarm(1);
+}

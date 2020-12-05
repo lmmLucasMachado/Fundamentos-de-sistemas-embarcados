@@ -12,11 +12,13 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 #include <arpa/inet.h>
+#include <signal.h>
 
-#include "../inc/cJSON.h"
-#include "../inc/gpio.h"
-#include "../inc/bme280_i2c.h"
-#include "../inc/interrupt_system.h"
+
+#include "./cJSON.h"
+#include "./gpio.h"
+#include "./bme280_i2c.h"
+#include "./interrupt_system.h"
 
 #define SA struct sockaddr 
 #define MAX_MSG 1024
@@ -33,12 +35,12 @@ void get_json();
 
 int status_sensor();
 
+void init_maintain_data();
+
 void maintain_data_csv();
 
-void init_maintain_data(void *args);
+void server_listen(void *args);
 
-void listen_server(void *args);
-
-void server_write(int signal);
+void server_write();
 
 #endif

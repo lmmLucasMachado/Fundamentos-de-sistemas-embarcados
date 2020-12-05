@@ -4,7 +4,7 @@ void menu(){
     int buffer = 0, lamp;
     double temp_wish;
     //menu
-    //do{
+    do{
         status_disp();
 
         printf("-----------------  Menu  -----------------\n");
@@ -12,13 +12,14 @@ void menu(){
         printf("1 - Acionar lampadas ou arcondicionado.\n");
         printf("2 - Escolher temperatura do ambiente.\n");
         printf("3 - Acionar alarme.\n");
+        printf("4 - Ver status dos dispositivos.\n");
         printf("\nDigite apenas um numero e pressione enter.\n");
         
         scanf("%d", &buffer);
 
         if (buffer == 0){
             printf("Opcao escolhida \"0\", fechar programa.\nObrigado. \n");
-	    exit(0);
+	        exit(0);
 //            break;
         }else if (buffer == 1){
             do{
@@ -35,8 +36,10 @@ void menu(){
 
                 scanf("%d", &lamp);
 
-                if (lamp < 0 && lamp > 6)
+                if (lamp > 0 && lamp < 7)
                     printf("Opcao invalida por favor escolha um numero entre 0 e 6.\n");
+                else if (lamp == 0)
+                    exit(0);
                 else{
                     set_disp_wish(lamp);
                     break;
@@ -80,6 +83,8 @@ void menu(){
 
             // acionar alarm
             set_alarm(1);
+        }else if (buffer == 4){
+            status_disp();
         }
         else{
             printf("Opcao invalida, por favor escolha uma opcao listada no menu, grato.\n");
@@ -87,12 +92,7 @@ void menu(){
 
         status_disp();
 
-        if (buffer == 0){
-    	     exit(0);
-	     //break;
-	}
-
-    //}while(1);
+    }while(buffer < 0 || buffer > 5);
 }
 
 void status_disp(){

@@ -111,6 +111,17 @@ void get_json(){
 
 }
 
+
+void init_maintain_data(){
+    printf("mantendo");
+
+    FILE *p_file;
+    p_file = fopen ("./doc/data.csv", "w+");
+    fprintf(p_file, "\"Data\",\"Hora\",\"Temperatura\",\"Umidade\",\"Lampada Cozinha\",\"Lampada Sala\",\"Lampada Quarto 1\",\"Lampada Quarto 2\",\"Ar-condicionado 1\",\"Ar-condicionado 2\",\"Sensor presenca sala\",\"Sensor presenca Cozinha\",\"Prota cozinha\",\"Janela cozinha\",\"Prota sala\",\"Janela sala\",\"Janela quarto 1\",\"Janela quarto 2\"\n");
+    fclose(p_file);
+
+}
+
 double *data;
 double temp, hum;
 
@@ -145,20 +156,7 @@ void maintain_data_csv(){
     fclose(p_file);
 
     //printf("\n\nEscrevendo csv\n\n");
-}
-
-void init_maintain_data(void *args){
-    printf("mantendo");
-
-    FILE *p_file;
-    p_file = fopen ("./doc/data.csv", "w+");
-    fprintf(p_file, "\"Data\",\"Hora\",\"Temperatura\",\"Umidade\",\"Lampada Cozinha\",\"Lampada Sala\",\"Lampada Quarto 1\",\"Lampada Quarto 2\",\"Ar-condicionado 1\",\"Ar-condicionado 2\",\"Sensor presenca sala\",\"Sensor presenca Cozinha\",\"Prota cozinha\",\"Janela cozinha\",\"Prota sala\",\"Janela sala\",\"Janela quarto 1\",\"Janela quarto 2\"\n");
-    fclose(p_file);
-
-    while(1){
-        sleep(1);
-        //maintain_data_csv();
-    }
+    alarm(1);
 }
 
 int status_sensor(){
@@ -181,8 +179,7 @@ int status_sensor(){
 
 int sock_fd2;
 
-void server_write(int signal){
-    alarm(1);
+void server_write(){
 
     struct sockaddr_in servaddr;
 
@@ -218,10 +215,14 @@ void server_write(int signal){
 
     printf("\nTeminnei de escrever\n");
     close(sock_fd2);
-    
+
+    // Maintain data CSV
+    maintain_data_csv();
+
+    alarm(1);
 }
 
-void listen_server(void *args){
+void server_listen(void *args){
 
     printf("\nLendo\n");
     

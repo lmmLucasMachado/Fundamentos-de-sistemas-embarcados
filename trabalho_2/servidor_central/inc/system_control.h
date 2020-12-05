@@ -13,9 +13,9 @@
 #include <sys/types.h> 
 #include <arpa/inet.h>
 
-#include "../inc/cJSON.h"
-#include "../inc/interrupt_system.h"
-#include "../inc/menu.h"
+#include "./cJSON.h"
+#include "./interrupt_system.h"
+#include "./menu.h"
 
 #define SA struct sockaddr 
 #define MAX_MSG 1024

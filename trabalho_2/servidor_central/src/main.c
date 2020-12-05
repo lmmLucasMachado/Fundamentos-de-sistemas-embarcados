@@ -5,27 +5,21 @@
 
 #include "../inc/system_control.h"
 
-pthread_t control_thread[2];
+pthread_t control_thread;
 
 int main(int argc, const char * argv[]){
         
     signal(SIGINT, interrupt_system);
+    
+    init_server();
+    
+    init_maintain_data();
+    
     signal(SIGALRM, server_write);
     alarm(1);
-    init_server();
-    sleep(5);
 
-    //pthread_create (&control_thread[0], NULL, server_listen, NULL);
-    //pthread_join(control_thread[0], NULL);
-
-    //pthread_create (&control_thread[1], NULL, server_write, NULL);
-    //pthread_join(control_thread[1], NULL);
-
-   while(1){
-	   server_listen();
-	   menu();
-	   
-    }
+    pthread_create (&control_thread, NULL, server_listen, NULL);
+    pthread_join(control_thread, NULL);
 
     return 0;
 

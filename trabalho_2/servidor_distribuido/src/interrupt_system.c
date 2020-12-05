@@ -6,10 +6,10 @@ void interrupt_system(int signal) {
     
     int i;
 
-    extern pthread_t control_thread[3];
+    extern pthread_t control_thread;
     // stop threads
-    for(i = 0;i < 2;i++)
-        pthread_cancel(control_thread[i] );
+    
+    pthread_cancel(control_thread);
 
     // Close Socket
     extern int sock_fd;
