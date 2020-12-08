@@ -17,15 +17,19 @@ int main(int argc, const char * argv[]){
 
     init_maintain_data();
 
-    // send data
+    // Send data
+    
     signal(SIGALRM, server_write);
     alarm(1);
 
+    while(1){
+        
+    }
     // Receive data
-    pthread_create(&control_thread, NULL, server_listen, NULL);
+    //pthread_create(&control_thread, NULL, server_listen, NULL);
     printf("\naqui\n");
     
-    pthread_join(control_thread, NULL);
+    //pthread_join(control_thread, NULL);
 
     //printf("fim");
     return 0;

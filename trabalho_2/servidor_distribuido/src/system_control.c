@@ -204,14 +204,20 @@ void server_write(){
     if(err < 0) {
         printf("\nClose socket send.\n");
         close(sock_fd2);
+        return;
     }
     
     sprintf(message,
     "{ \"lamp_1\": %d, \"lamp_2\": %d, \"lamp_3\": %d,\n \"lamp_4\": %d, \"air_1\": %d, \"air_2\": %d, \"temp\": %0.2lf,  \"hum\": %0.2lf,  \"alarm\": %d }",
     lamp[0], lamp[1], lamp[2], lamp[3], air[0], air[1], temp, hum, status_sensor() );
 
+    //err = write(sock_fd, message, MAX_MSG);
+    err = send(sock_fd, message, MAX_MSG, 0);
+    if(err <= 0) {
+        fprintf(stderr, "Error sending alarm package\n");
+        exit(-1);
+    }
     printf("\n%s\n",message);
-    send(sock_fd, message, MAX_MSG, 0);
 
     printf("\nTeminnei de escrever\n");
     close(sock_fd2);
