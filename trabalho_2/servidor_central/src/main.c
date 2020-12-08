@@ -15,8 +15,8 @@ int main(int argc, const char * argv[]){
     
     init_maintain_data();
     
-    signal(SIGALRM, server_write);
-    alarm(1);
+    //signal(SIGALRM, server_write);
+    //alarm(1);
 
     pthread_create (&control_thread, NULL, server_listen, NULL);
     pthread_join(control_thread, NULL);

@@ -16,8 +16,8 @@ void init_server(){
 
     // assign IP, PORT
     servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_DISTRIBUIDO); 
-    servaddr.sin_port = htons(PORT_D); 
+    servaddr.sin_addr.s_addr = inet_addr(INADDR_ANY); 
+    servaddr.sin_port = htons(PORT_C); 
 
     if ((bind(sock_fd, (SA*)&servaddr, sizeof(servaddr))) != 0) { 
         printf("socket bind failed...\n"); 
@@ -47,7 +47,7 @@ void get_json(int p_sock_fd){
 
     //mock_json(buffer);
     
-//    printf("%s\n",buffer);
+    printf("%s\n",buffer);
     
     cJSON *json = cJSON_Parse(buffer);
 
@@ -187,7 +187,7 @@ void server_write(){
     // assign IP, PORT 
     servaddr.sin_family = AF_INET; 
     servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_CENTRAL);
-    servaddr.sin_port = htons(PORT_D); 
+    servaddr.sin_port = htons(PORT_C); 
 
     char message[MAX_MSG];
     printf("\nEscrevendo\n");
