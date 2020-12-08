@@ -28,7 +28,7 @@
 
 void init_server();
 
-void get_json();
+void get_json(int p_sock_fd);
 
 double get_temp();
 
@@ -48,8 +48,12 @@ void set_disp_wish(int disp_w);
 
 void set_alarm(int alarm_w);
 
-void server_listen();
+void server_listen(void *args);
 
-void server_write(int signal);
+void server_write();
+
+void init_maintain_data();
+
+void maintain_data_csv();
 
 #endif

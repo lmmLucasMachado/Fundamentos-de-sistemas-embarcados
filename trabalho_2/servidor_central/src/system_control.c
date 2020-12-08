@@ -19,24 +19,29 @@ void init_server(){
     servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_DISTRIBUIDO); 
     servaddr.sin_port = htons(PORT_D); 
 
-    // connect the client socket to server socket 
-    if (connect(sock_fd, (SA*)&servaddr, sizeof(servaddr)) != 0) { 
-        printf("connection with the server failed...\n"); 
+    if ((bind(sock_fd, (SA*)&servaddr, sizeof(servaddr))) != 0) { 
+        printf("socket bind failed...\n"); 
         exit(0); 
-    } 
+    }
     else
-        printf("connected to the server..\n");
+        printf("Socket successfully binded..\n");
+
+    // Now server is ready to listen and verification 
+    if ((listen(sock_fd, 5)) != 0) { 
+        printf("Listen failed...\n"); 
+        exit(0); 
+    }
 
 }
 
 int lamp[5], air[3], alarm_;
 double temp, hum;
 
-void get_json(){
+void get_json(int p_sock_fd){
     char buffer[MAX_MSG];
 
     //pega msg do socket
-    read(sock_fd, buffer, sizeof(buffer));
+    read(p_sock_fd, buffer, sizeof(buffer));
 
     //printf("Menssage:\n %s", buffer);
 
@@ -145,8 +150,10 @@ void set_alarm(int alarm_w){
         alarm_ = alarm_w;
 }
 
-void server_listen(){
+void server_listen(void *args){
     while(1){
+        int conect_fd = accept(sock_fd, NULL, NULL); 
+        
         if (conect_fd < 0) { 
             printf("server acccept failed...\n"); 
             exit(0); 
@@ -154,14 +161,14 @@ void server_listen(){
         else{
             //printf("server acccept the client...\n"); 
             sleep(0.120);
-            get_json();
+            get_json(conect_fd);
         }
     }
 }
 
 int sock_fd2;
 
-void server_write(int signal){
+void server_write(){
 
     // Call menu
     menu();
@@ -242,7 +249,7 @@ void maintain_data_csv(){
     fprintf(p_file,"\"%d:%d:%d\",", date_hour->tm_hour, date_hour->tm_min, date_hour->tm_sec);
     fprintf(p_file, "\"%0.2lf\",\"%0.2lf\"\n", temp, hum);
     fprintf(p_file, "\"%d\",\"%d\",\"%d\",\"%d\",", lamp[0],lamp[1],lamp[2],lamp[3]);
-    fprintf(p_file, "\"%d\",\"%d,\"%d\",\"%d\",\"%d\",\"%d\",", air[0],air[1],alarm_);
+    fprintf(p_file, "\"%d\",\"%d,\"%d\"", air[0],air[1],alarm_);
     
     fclose(p_file);
 

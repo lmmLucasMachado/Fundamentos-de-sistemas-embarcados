@@ -31,7 +31,7 @@
 
 void init_server_listen();
 
-void get_json();
+void get_json(int p_sock_fd);
 
 int status_sensor();
 
