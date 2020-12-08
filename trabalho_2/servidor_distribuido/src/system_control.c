@@ -71,11 +71,12 @@ void mock_json(char *msg) {
 
 int lamp[5], air[3], status_sens[8] = {1, 1, 1, 1, 1, 1, 1, 1};
 
-void get_json(){
+void get_json(int p_sock_fd){
     char buffer[MAX_MSG];
-
     //pega msg do socket
-    read(sock_fd, buffer, sizeof(buffer));
+    read(p_sock_fd, buffer, sizeof(buffer));
+
+    printf("\n%s\n",buffer);
 
     printf("Menssage receive:\n %s", buffer);
 
@@ -243,7 +244,7 @@ void server_listen(void *args){
             printf("server acccept the client...\n"); 
 
         sleep(0.120);
-        get_json();
+        get_json(conect_fd);
 
         int i;
         // lamp on/off
