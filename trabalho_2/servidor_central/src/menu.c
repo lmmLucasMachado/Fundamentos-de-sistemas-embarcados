@@ -36,14 +36,14 @@ void menu(){
 
                 scanf("%d", &lamp);
 
-                if (lamp > 0 && lamp < 7)
+                if (lamp < 0 && lamp > 7)
                     printf("Opcao invalida por favor escolha um numero entre 0 e 6.\n");
-                else if (lamp == 0)
-                    exit(0);
                 else{
                     set_disp_wish(lamp);
                     break;
                 }
+		if (lamp == 0)
+		    exit(0);
             }while(1);
             
             switch (lamp) {
@@ -90,9 +90,11 @@ void menu(){
             printf("Opcao invalida, por favor escolha uma opcao listada no menu, grato.\n");
         }
 
-        status_disp();
+        if (buffer != 4)
+	    status_disp();
 
     }while(buffer < 0 || buffer > 5);
+    alarm(1);
 }
 
 void status_disp(){
@@ -108,7 +110,7 @@ void status_disp(){
     hum = get_hum();
 
     printf("-----------------  Status dispositivos  -----------------\n");
-    printf("\n               0 = on             1 = off\n");
+    printf("\n  \n");
     printf("Lampada cozinha:   %d          Lampada sala: %d\n", lamp[0], lamp[1]);
     printf("Lampada quarto 1:  %d          Lampada quarto 2: %d\n", lamp[2], lamp[3]);
     printf("Ar-condicionado 1: %d          Ar-condicionado 2: %d\n", air[0], air[1]);
@@ -118,6 +120,9 @@ void status_disp(){
         printf("\nAlarme ligado!!!\n");
     else 
         printf("\nAlarme Desligado!\n");
+
+    free(lamp);
+    free(air);
         
 }
 

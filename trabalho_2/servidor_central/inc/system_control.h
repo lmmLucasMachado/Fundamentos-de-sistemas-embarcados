@@ -12,6 +12,7 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 #include <arpa/inet.h>
+#include <signal.h>
 
 #include "./cJSON.h"
 #include "./interrupt_system.h"
@@ -48,7 +49,7 @@ void set_disp_wish(int disp_w);
 
 void set_alarm(int alarm_w);
 
-void server_listen(void *args);
+void *server_listen(void *args);
 
 void server_write();
 

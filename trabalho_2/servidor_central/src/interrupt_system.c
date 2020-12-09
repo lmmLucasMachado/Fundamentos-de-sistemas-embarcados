@@ -15,6 +15,9 @@ void interrupt_system(int signal) {
     extern int sock_fd;
     close(sock_fd);
 
+    extern int send_socket;
+    close(send_socket);
+
     exit(0);
 
 }
