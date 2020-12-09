@@ -24,7 +24,6 @@ int main(int argc, const char * argv[]){
 
     // Receive data
     pthread_create(&control_thread, NULL, server_listen, NULL);
-    printf("\naqui\n");
     
     pthread_join(control_thread, NULL);
 

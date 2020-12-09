@@ -68,21 +68,17 @@ void mock_json(char *msg) {
 }
 */
 
-int lamp[5], air[3], status_sens[8] = {1, 1, 1, 1, 1, 1, 1, 1};
+int lamp[5], air[3], status_sens[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 void get_json(int p_sock_fd){
     char buffer[MAX_MSG];
     //pega msg do socket
     read(p_sock_fd, buffer, sizeof(buffer));
 
-    printf("\n%s\n",buffer);
-
-    printf("Menssage receive:\n %s", buffer);
+    printf("\nMenssage recebida: %s\n", buffer);
 
     //mock_json(buffer);
-    
-    printf("messge receive : %s\n",buffer);
-    
+        
     cJSON *json = cJSON_Parse(buffer);
 
     cJSON* item;
@@ -161,14 +157,14 @@ void maintain_data_csv(){
 
 int status_sensor(){
     int i, buffer;
-    int alarm_on = 0;
+    int alarm_on = 1;
 
     for (i = 0;i < 8;i++){
         buffer = get_sensor(i);
         
         if (status_sens[i] == alarm_on){
             //push pra central
-            printf("Alarme acionado!!!");
+            printf("\nAlarme acionado!!!\n");
             status_sens[i] = buffer;
             break;
         }else
@@ -211,7 +207,7 @@ void server_write(){
     "{ \"lamp_1\": %d, \"lamp_2\": %d, \"lamp_3\": %d,\n \"lamp_4\": %d, \"air_1\": %d, \"air_2\": %d, \"temp\": %0.2lf,  \"hum\": %0.2lf,  \"alarm\": %d }",
     lamp[0], lamp[1], lamp[2], lamp[3], air[0], air[1], temp, hum, status_sensor() );
 
-    printf("Menssagem: %s",message);
+    printf("\nMenssagem enviada: %s\n",message);
 
     // send message for server central
     err = send(send_socket, message, MAX_MSG, 0);
@@ -241,10 +237,10 @@ void *server_listen(void *args){
         int conect_fd = accept(sock_fd, NULL, NULL);
 
         if (conect_fd < 0) {
-            printf("server acccept failed...\n"); 
+            printf("\nserver acccept failed...\n"); 
             continue; 
         }else{
-            printf("server acccept the client...\n"); 
+            printf("\nserver acccept the client...\n"); 
             get_json(conect_fd);
             close(conect_fd);
         }
