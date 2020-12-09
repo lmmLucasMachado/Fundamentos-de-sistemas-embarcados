@@ -12,6 +12,7 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 #include <arpa/inet.h>
+#include <signal.h>
 
 #include "./cJSON.h"
 #include "./interrupt_system.h"

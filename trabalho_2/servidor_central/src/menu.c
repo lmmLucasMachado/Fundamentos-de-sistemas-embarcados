@@ -90,9 +90,11 @@ void menu(){
             printf("Opcao invalida, por favor escolha uma opcao listada no menu, grato.\n");
         }
 
-        status_disp();
+        if (buffer != 4)
+	    status_disp();
 
     }while(buffer < 0 || buffer > 5);
+    alarm(1);
 }
 
 void status_disp(){
@@ -118,6 +120,9 @@ void status_disp(){
         printf("\nAlarme ligado!!!\n");
     else 
         printf("\nAlarme Desligado!\n");
+
+    free(lamp);
+    free(air);
         
 }
 

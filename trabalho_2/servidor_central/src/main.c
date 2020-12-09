@@ -14,7 +14,7 @@ int main(int argc, const char * argv[]){
     init_server();
     
     init_maintain_data();
-    
+
     signal(SIGALRM, server_write);
     alarm(1);
 

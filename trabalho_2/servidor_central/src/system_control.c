@@ -121,6 +121,7 @@ int *get_air(){
 }
 
 double temp_wish;
+
 void set_temp_wish(double temp_w){
 
     temp_wish = temp_w;
@@ -150,7 +151,7 @@ void set_alarm(int alarm_w){
 void *server_listen(void *args){
     while(1){
         int conect_fd = accept(sock_fd, NULL, NULL); 
-        printf("listen\n\n");
+        //printf("listen\n\n");
         if (conect_fd < 0) { 
             printf("server acccept failed...\n"); 
             continue; 
@@ -162,6 +163,7 @@ void *server_listen(void *args){
         }
     }
 }
+int send_socket;
 
 void server_write(){
 
@@ -170,7 +172,7 @@ void server_write(){
     
     struct sockaddr_in servaddr;
 
-    int send_socket = socket(AF_INET, SOCK_STREAM, 0); 
+    send_socket = socket(AF_INET, SOCK_STREAM, 0); 
 
     if (send_socket == -1)
         printf("socket creation failed...\n"); 
@@ -185,8 +187,8 @@ void server_write(){
     servaddr.sin_port = htons(PORT_D); 
 
     char message[MAX_MSG];
-    //printf("\nEscrevendo\n");
-    
+    printf("\nEscrevendo\n");
+ 
     int err = connect(send_socket, (struct sockaddr*)&servaddr, sizeof(servaddr));
     
     if(err < 0) {
@@ -217,7 +219,7 @@ void server_write(){
     send(sock_fd, message, MAX_MSG,0);
 
     close(send_socket);
-
+    printf("\nfim do envio\n");
     // Mantendo dados CSV
     maintain_data_csv();
 
@@ -225,7 +227,7 @@ void server_write(){
 }
 
 void init_maintain_data(){
-    printf("mantendo");
+    //printf("mantendo");
 
     FILE *p_file;
     p_file = fopen ("./doc/data.csv", "w+");
