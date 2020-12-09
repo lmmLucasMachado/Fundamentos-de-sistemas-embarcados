@@ -15,12 +15,12 @@ void interrupt_system(int signal) {
     extern int sock_fd;
     close(sock_fd);
 
-    extern int sock_fd2;
-    close(sock_fd2);
+    extern int send_socket;
+    close(send_socket);
 
     // Off GPIO
     for(i = 0;i < 6;i++)
-        set_high_gpio(i);
+        set_low_gpio(i);
     
     //close GPIO
     bcm2835_close();

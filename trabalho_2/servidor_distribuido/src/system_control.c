@@ -16,7 +16,7 @@ void init_server_listen(){
 
     // assign IP, PORT 
     servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_addr.s_addr = INADDR_ANY;
     servaddr.sin_port = htons(PORT_D); 
 
     // Binding newly created socket to given IP and verification 
@@ -31,8 +31,7 @@ void init_server_listen(){
     if ((listen(sock_fd, 5)) != 0) { 
         printf("Listen failed...\n"); 
         exit(0); 
-    }
-    else
+    }else
         printf("Server listening..\n");
 
 }
@@ -149,7 +148,7 @@ void maintain_data_csv(){
     p_file = fopen ("./doc/data.csv", "a+");
     fprintf(p_file,"\"%d/%d/%d\",", date_hour->tm_mday, date_hour->tm_mon+1,date_hour->tm_year+1900);
     fprintf(p_file,"\"%d:%d:%d\",", date_hour->tm_hour, date_hour->tm_min, date_hour->tm_sec);
-    fprintf(p_file, "\"%0.2lf\",\"%0.2lf\"\n", temp, hum);
+    fprintf(p_file, "\"%0.2lf\",\"%0.2lf\",", temp, hum);
     fprintf(p_file, "\"%d\",\"%d\",\"%d\",\"%d\",", lamp[0],lamp[1],lamp[2],lamp[3]);
     fprintf(p_file, "\"%d\",\"%d,\"%d\",\"%d\",\"%d\",\"%d\",", air[0],air[1],status_sens[0],status_sens[1],status_sens[2],status_sens[3]);
     fprintf(p_file, "\"%d\",\"%d,\"%d\",\"%d\"\n", status_sens[4],status_sens[5],status_sens[6],status_sens[7]);
@@ -178,15 +177,15 @@ int status_sensor(){
     return buffer;
 }
 
-int sock_fd2;
+int send_socket;
 
 void server_write(){
 
     struct sockaddr_in servaddr;
 
-    sock_fd2 = socket(AF_INET, SOCK_STREAM, 0); 
+    send_socket = socket(AF_INET, SOCK_STREAM, 0); 
 
-    if (sock_fd2 == -1)
+    if (send_socket == -1)
         printf("socket creation failed...\n"); 
     else
         printf("Socket successfully created..\n"); 
@@ -199,12 +198,12 @@ void server_write(){
     servaddr.sin_port = htons(PORT_C); 
 
     char message[MAX_MSG];
-    printf("\nEscrevendo\n");
     
-    int err = connect(sock_fd2, (struct sockaddr*)&servaddr, sizeof(servaddr));
+    int err = connect(send_socket, (struct sockaddr*)&servaddr, sizeof(servaddr));
+
     if(err < 0) {
         printf("\nClose socket send.\n");
-        close(sock_fd2);
+        close(send_socket);
         return;
     }
     
@@ -212,58 +211,60 @@ void server_write(){
     "{ \"lamp_1\": %d, \"lamp_2\": %d, \"lamp_3\": %d,\n \"lamp_4\": %d, \"air_1\": %d, \"air_2\": %d, \"temp\": %0.2lf,  \"hum\": %0.2lf,  \"alarm\": %d }",
     lamp[0], lamp[1], lamp[2], lamp[3], air[0], air[1], temp, hum, status_sensor() );
 
-    //err = write(sock_fd, message, MAX_MSG);
-    err = send(sock_fd, message, MAX_MSG, 0);
+    printf("Menssagem: %s",message);
+
+    // send message for server central
+    err = send(send_socket, message, MAX_MSG, 0);
+
     if(err <= 0) {
         fprintf(stderr, "Error sending alarm package\n");
         exit(-1);
     }
     printf("\n%s\n",message);
 
-    printf("\nTeminnei de escrever\n");
-    close(sock_fd2);
+    // Close socket
+    close(send_socket);
 
     // Maintain data CSV
     maintain_data_csv();
 
     alarm(1);
+
 }
 
-void server_listen(void *args){
+void *server_listen(void *args){
 
     printf("\nLendo\n");
     
     while(1){
         // Accept the data packet from client and verification 
-        int conect_fd = accept(sock_fd, NULL, NULL); 
+        int conect_fd = accept(sock_fd, NULL, NULL);
+
         if (conect_fd < 0) {
             printf("server acccept failed...\n"); 
-            exit(0); 
-        }
-        else
+            continue; 
+        }else{
             printf("server acccept the client...\n"); 
-
-        sleep(0.120);
-        get_json(conect_fd);
+            get_json(conect_fd);
+            close(conect_fd);
+        }
 
         int i;
         // lamp on/off
-        //printf("\nAQUI\n");
+        //printf("\n     AQUI     \n");
         for(i = 0;i < 4;i++){
-            if (lamp[i] == 0)
+            if (lamp[i] == 1)
                 set_high_gpio(i);
-            else if(lamp[i] == 1)
+            else if(lamp[i] == 0)
                 set_low_gpio(i);
         }
 
         // air on/off
         for(i = 0;i < 2;i++){
-            if (air[i] == 0)
+            if (air[i] == 1)
                 set_high_gpio(i + 4);
-            else if(air[i] == 1)
+            else if(air[i] == 0)
                 set_low_gpio(i + 4);
         }
-        //shutdown(conect_fd);
-        close(conect_fd);
     }
 }

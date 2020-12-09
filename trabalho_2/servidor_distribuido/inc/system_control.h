@@ -39,7 +39,7 @@ void init_maintain_data();
 
 void maintain_data_csv();
 
-void server_listen(void *args);
+void *server_listen(void *args);
 
 void server_write();
 
