@@ -16,7 +16,7 @@ void init_server(){
 
     // assign IP, PORT
     servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = inet_addr(INADDR_ANY); 
+    servaddr.sin_addr.s_addr = INADDR_ANY; 
     servaddr.sin_port = htons(PORT_C); 
 
     if ((bind(sock_fd, (SA*)&servaddr, sizeof(servaddr))) != 0) { 
@@ -31,7 +31,6 @@ void init_server(){
         printf("Listen failed...\n"); 
         exit(0); 
     }
-
 }
 
 int lamp[5], air[3], alarm_;
@@ -45,9 +44,7 @@ void get_json(int p_sock_fd){
 
     //printf("Menssage:\n %s", buffer);
 
-    //mock_json(buffer);
-    
-    printf("%s\n",buffer);
+    //mock_json(buffer);   
     
     cJSON *json = cJSON_Parse(buffer);
 
@@ -131,7 +128,7 @@ void set_temp_wish(double temp_w){
 }
 
 int control_air(){
-    if ((temp_wish - 1) < temp  && (temp_wish + 1) > temp) 
+    if ((temp_wish - 1) <= temp  && (temp_wish + 1) >= temp) 
         return 0;
     else 
         return 1;
@@ -150,23 +147,21 @@ void set_alarm(int alarm_w){
         alarm_ = alarm_w;
 }
 
-void server_listen(void *args){
+void *server_listen(void *args){
     while(1){
         int conect_fd = accept(sock_fd, NULL, NULL); 
-        
+        printf("listen\n\n");
         if (conect_fd < 0) { 
             printf("server acccept failed...\n"); 
-            exit(0); 
+            continue; 
         } 
-        else{
+        else{	
             //printf("server acccept the client...\n"); 
-            sleep(0.120);
             get_json(conect_fd);
+	    close(conect_fd);
         }
     }
 }
-
-int sock_fd2;
 
 void server_write(){
 
@@ -175,9 +170,9 @@ void server_write(){
     
     struct sockaddr_in servaddr;
 
-    sock_fd2 = socket(AF_INET, SOCK_STREAM, 0); 
+    int send_socket = socket(AF_INET, SOCK_STREAM, 0); 
 
-    if (sock_fd2 == -1)
+    if (send_socket == -1)
         printf("socket creation failed...\n"); 
     else
         printf("Socket successfully created..\n"); 
@@ -186,30 +181,33 @@ void server_write(){
 
     // assign IP, PORT 
     servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_CENTRAL);
-    servaddr.sin_port = htons(PORT_C); 
+    servaddr.sin_addr.s_addr = inet_addr(SERVIDOR_DISTRIBUIDO);
+    servaddr.sin_port = htons(PORT_D); 
 
     char message[MAX_MSG];
-    printf("\nEscrevendo\n");
+    //printf("\nEscrevendo\n");
     
-    int err = connect(sock_fd2, (struct sockaddr*)&servaddr, sizeof(servaddr));
+    int err = connect(send_socket, (struct sockaddr*)&servaddr, sizeof(servaddr));
+    
     if(err < 0) {
-        close(sock_fd2);
+        printf("\nClose socket send.\n");
+        close(send_socket);
+        return;
     }
     
     int air_1, air_2;
 
     if (disp_wish > 4 && disp_wish < 7 && control_air() != 0){
         if (disp_wish == 5)
-            air_1 = 0;
+            air_1 = 1;
         else
-            air_2 = 0;
+            air_2 = 1;
     }else
-        lamp[disp_wish - 1] = 0;
+        lamp[disp_wish - 1] = 1;
 
     if (control_air() == 0){
-        air_1 = 0;
-        air_2 = 0;
+        air_1 = 1;
+        air_2 = 1;
     }
     
     sprintf(message,
@@ -218,7 +216,7 @@ void server_write(){
 
     send(sock_fd, message, MAX_MSG,0);
 
-    close(sock_fd2);
+    close(send_socket);
 
     // Mantendo dados CSV
     maintain_data_csv();
