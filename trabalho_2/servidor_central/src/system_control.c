@@ -191,12 +191,6 @@ void server_write(){
  
     int err = connect(send_socket, (struct sockaddr*)&servaddr, sizeof(servaddr));
     
-    if(err < 0) {
-        printf("\nClose socket send.\n");
-        close(send_socket);
-        return;
-    }
-    
     int air_1, air_2;
 
     if (disp_wish > 4 && disp_wish < 7 && control_air() != 0){
@@ -223,7 +217,13 @@ void server_write(){
     // Mantendo dados CSV
     maintain_data_csv();
 
-    alarm(1);
+	alarm(1);
+
+    if(err < 0) {
+        printf("\nClose socket send.\n");
+        close(send_socket);
+        return;
+    }
 }
 
 void init_maintain_data(){
